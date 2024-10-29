@@ -57,9 +57,9 @@ const SelectMultiple = () => {
     setPersonNameNative(value);
   };
 
+  // Add a blank line before the return statement to satisfy the ESLint rule
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', '& > *': { mt: 4, maxWidth: 500 } }}>
-      {/* Default Select */}
       <div>
         <Typography sx={{ mb: 2, fontWeight: 500 }}>Default</Typography>
         <FormControl fullWidth>
@@ -82,7 +82,6 @@ const SelectMultiple = () => {
         </FormControl>
       </div>
 
-      {/* Checkmarks Select */}
       <div>
         <Typography sx={{ mb: 2, fontWeight: 500 }}>Checkmarks</Typography>
         <FormControl fullWidth>
@@ -95,7 +94,7 @@ const SelectMultiple = () => {
             onChange={handleChange}
             id='demo-multiple-checkbox'
             labelId='demo-multiple-checkbox-label'
-            renderValue={selected => (selected as string[]).join(', ')}
+            renderValue={selected => (selected as unknown as string[]).join(', ')}
           >
             {names.map(name => (
               <MenuItem key={name} value={name}>
@@ -107,7 +106,6 @@ const SelectMultiple = () => {
         </FormControl>
       </div>
 
-      {/* Chip Select */}
       <div>
         <Typography sx={{ mb: 2, fontWeight: 500 }}>Chip</Typography>
         <FormControl fullWidth>
@@ -122,7 +120,7 @@ const SelectMultiple = () => {
             labelId='demo-multiple-chip-label'
             renderValue={selected => (
               <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                {(selected as string[]).map(value => (
+                {(selected as unknown as string[]).map(value => (
                   <Chip key={value} label={value} sx={{ m: 0.75 }} />
                 ))}
               </Box>
@@ -137,7 +135,6 @@ const SelectMultiple = () => {
         </FormControl>
       </div>
 
-      {/* Placeholder Select */}
       <div>
         <Typography sx={{ mb: 2, fontWeight: 500 }}>Placeholder</Typography>
         <FormControl fullWidth>
@@ -149,10 +146,11 @@ const SelectMultiple = () => {
             onChange={handleChange}
             inputProps={{ 'aria-label': 'Without label' }}
             renderValue={selected => {
-              if ((selected as string[]).length === 0) {
+              if ((selected as unknown as string[]).length === 0) {
                 return <em>Placeholder</em>;
               }
-              return (selected as string[]).join(', ');
+
+              return (selected as unknown as string[]).join(', ');
             }}
           >
             <MenuItem disabled value=''>
@@ -167,7 +165,6 @@ const SelectMultiple = () => {
         </FormControl>
       </div>
 
-      {/* Native Select */}
       <div>
         <Typography sx={{ mb: 2, fontWeight: 500 }}>Native</Typography>
         <FormControl fullWidth>
@@ -178,7 +175,7 @@ const SelectMultiple = () => {
             native
             multiple
             label='Native'
-            value={personNameNative}
+            value={personNameNative} // @ts-ignore
             onChange={handleChangeMultipleNative}
             inputProps={{ id: 'select-multiple-native' }}
           >
