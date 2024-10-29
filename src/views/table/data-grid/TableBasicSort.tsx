@@ -1,35 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect, MouseEvent } from 'react';
 import axios from 'axios';
 import {
-  DataGrid,
-  GridColDef,
-} from '@mui/x-data-grid';
-import {
-  Card,
-  CardHeader,
-  IconButton,
+  Grid,
+  Snackbar,
+  Alert,
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
-  TextField,
   Button,
-  Snackbar,
-  Alert,
+  Card,
+  CardHeader,
+  IconButton,
+  Menu,
+  MenuItem,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import { DataGrid, GridColDef, GridDeleteIcon, GridRowSelectionModel } from '@mui/x-data-grid';
+import { Icon } from '@iconify/react';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-// Define the User interface for the original data structure
 interface User {
-  id: number; // You can omit this if you're generating the ID
+  id: number;
   firstName: string;
   lastName: string;
   phone: string;
-  address: string; // Adjust based on actual structure
+  address: string;
 }
 
-// Define the TransformedUser interface for the transformed data structure
 interface TransformedUser {
   id: number;
   arrivalDate: string;
@@ -43,16 +41,16 @@ interface TransformedUser {
   address: string;
 }
 
-// Define the TableSort component
 const TableSort = () => {
   const [data, setData] = useState<TransformedUser[]>([]);
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 7 });
-  const [editUser, setEditUser] = useState<TransformedUser | null>(null);
-  const [open, setOpen] = useState(false);
-  const [toastOpen, setToastOpen] = useState(false); // State for toast notification
-  const [filter, setFilter] = useState({ arrivalDate: '', fullName: '' }); // State for filters
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastSeverity, setToastSeverity] = useState<'success' | 'error'>('success');
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<GridRowSelectionModel>([]);
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
-  // Fetch the data when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -64,7 +62,7 @@ const TableSort = () => {
           phone: `+998-90-500-50-05`,
           courseType: 'FrontEnd',
           weekDays: 'Dushanba, Chorshanba, Payshanba',
-          courseLanguage: 'O\'zbek',
+          courseLanguage: "O'zbek",
           time: '18:00',
           occupation: 'Student',
           address: 'Samarkand',
@@ -77,39 +75,34 @@ const TableSort = () => {
     fetchData();
   }, []);
 
-  // Define the delete function
-  const handleDelete = (id: number) => {
-    setData((prevData) => {
-      const newData = prevData.filter((user) => user.id !== id);
-      setToastOpen(true); // Open the toast notification
-      return newData;
-    });
+  const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
+    setMenuAnchor(event.currentTarget);
   };
 
-  // Define the edit function
-  const handleEdit = (user: TransformedUser) => {
-    setEditUser(user);
-    setOpen(true); // Open the edit dialog
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
   };
 
-  // Handle edit form submission
-  const handleEditSubmit = () => {
-    if (editUser) {
-      setData((prevData) =>
-        prevData.map((user) => (user.id === editUser.id ? editUser : user))
-      );
-    }
-    setOpen(false); // Close the edit dialog
-    setEditUser(null); // Reset edit user
+  const handleDelete = () => {
+    setConfirmOpen(true);
+    handleMenuClose(); // Close menu after clicking delete
   };
 
-  // Handle filter change
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFilter((prev) => ({ ...prev, [name]: value }));
+  const confirmDelete = () => {
+    setData((prevData) =>
+      prevData.filter((user) => !selectedIds.includes(user.id))
+    );
+    setToastMessage('Selected users deleted successfully!');
+    setToastSeverity('success');
+    setToastOpen(true);
+    setConfirmOpen(false);
+    setSelectedIds([]);
   };
 
-  // Define the columns for the DataGrid
+  const cancelDelete = () => {
+    setConfirmOpen(false);
+  };
+
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'arrivalDate', headerName: 'Kelgan Sanasi', width: 150 },
@@ -121,86 +114,76 @@ const TableSort = () => {
     { field: 'time', headerName: 'Vaqti', width: 130 },
     { field: 'occupation', headerName: 'Faoliyat', width: 130 },
     { field: 'address', headerName: 'Yashash Manzili', width: 200 },
-    {
-      field: 'action',
-      headerName: 'Action',
-      width: 150,
-      renderCell: (params) => (
-        <>
-          <IconButton onClick={() => handleEdit(params.row)}>
-            <EditIcon color="primary" />
-          </IconButton>
-          <IconButton onClick={() => handleDelete(params.row.id)}>
-            <DeleteIcon color="error" />
-          </IconButton>
-        </>
-      ),
-    },
   ];
 
-  // Filter the data based on filters
-  const filteredData = data.filter(user => {
-    return (
-      (filter.arrivalDate ? user.arrivalDate.includes(filter.arrivalDate) : true) &&
-      (filter.fullName ? user.fullName.toLowerCase().includes(filter.fullName.toLowerCase()) : true)
-    );
-  });
-
-  // Render the DataGrid component
   return (
     <Card>
-      <CardHeader title='O`quvchilar' />
+      <Grid container alignItems="center" padding={2}>
+        {/* Header Title */}
+        <Grid item xs>
+          <CardHeader title="O`quvchilar" />
+        </Grid>
+
+        {/* Three-Dot Menu */}
+        <Grid item>
+          <IconButton onClick={handleMenuOpen}>
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            anchorEl={menuAnchor}
+            open={Boolean(menuAnchor)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={handleDelete} disabled={selectedIds.length === 0}>
+             O'chirish  <GridDeleteIcon/>
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>Option 2</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Option 3</MenuItem>
+          </Menu>
+        </Grid>
+      </Grid>
+
       <DataGrid
         autoHeight
-        rows={filteredData}
+        rows={data}
         columns={columns}
+        checkboxSelection
+        onRowSelectionModelChange={(newSelection) => setSelectedIds(newSelection)}
         pageSizeOptions={[7, 10, 25]}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
       />
 
-      {/* Edit User Dialog */}
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Edit User</DialogTitle>
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={confirmOpen} onClose={cancelDelete}>
+        <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
-          {editUser && (
-            <>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Full Name"
-                fullWidth
-                value={editUser.fullName}
-                onChange={(e) => setEditUser({ ...editUser, fullName: e.target.value })}
-              />
-              <TextField
-                margin="dense"
-                label="Phone"
-                fullWidth
-                value={editUser.phone}
-                onChange={(e) => setEditUser({ ...editUser, phone: e.target.value })}
-              />
-              <TextField
-                margin="dense"
-                label="Address"
-                fullWidth
-                value={editUser.address}
-                onChange={(e) => setEditUser({ ...editUser, address: e.target.value })}
-              />
-              {/* Add other fields as necessary */}
-            </>
-          )}
+          <DialogContentText>
+            Siz rostan ham bu o'quvchini o'chirmoqchimisiz?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={handleEditSubmit}>Save</Button>
+          <Button onClick={cancelDelete} color="primary">
+            Yo'q
+          </Button>
+          <Button onClick={confirmDelete} color="error" autoFocus>
+            Xa
+          </Button>
         </DialogActions>
       </Dialog>
 
       {/* Toast Notification */}
-      <Snackbar open={toastOpen} autoHideDuration={6000} onClose={() => setToastOpen(false)}>
-        <Alert onClose={() => setToastOpen(false)} severity="error" sx={{ width: '100%' }}>
-          Muvaffaqiyatli o'chirildi!
+      <Snackbar
+        open={toastOpen}
+        autoHideDuration={6000}
+        onClose={() => setToastOpen(false)}
+      >
+        <Alert
+          onClose={() => setToastOpen(false)}
+          severity={toastSeverity}
+          sx={{ width: '100%' }}
+        >
+          {toastMessage}
         </Alert>
       </Snackbar>
     </Card>

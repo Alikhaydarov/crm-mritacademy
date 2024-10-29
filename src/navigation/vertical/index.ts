@@ -359,133 +359,133 @@ const navigation = (): VerticalNavItemsType => {
     //   title: 'Dialog Examples',
     //   path: '/pages/dialog-examples'
     // },
-    {
-      sectionTitle: 'User Interface'
-    },
-    {
-      title: 'Typography',
-      icon: 'tabler:typography',
-      path: '/ui/typography'
-    },
-    {
-      title: 'Icons',
-      path: '/ui/icons',
-      icon: 'tabler:brand-tabler'
-    },
-    {
-      title: 'Cards',
-      icon: 'tabler:id',
-      children: [
-        {
-          title: 'Basic',
-          path: '/ui/cards/basic'
-        },
-        {
-          title: 'Advanced',
-          path: '/ui/cards/advanced'
-        },
-        {
-          title: 'Statistics',
-          path: '/ui/cards/statistics'
-        },
-        {
-          title: 'Widgets',
-          path: '/ui/cards/widgets'
-        },
-        {
-          title: 'Actions',
-          path: '/ui/cards/actions'
-        }
-      ]
-    },
-    {
-      badgeContent: '19',
-      title: 'Components',
-      icon: 'tabler:archive',
-      badgeColor: 'primary',
-      children: [
-        {
-          title: 'Accordion',
-          path: '/components/accordion'
-        },
-        {
-          title: 'Alerts',
-          path: '/components/alerts'
-        },
-        {
-          title: 'Avatars',
-          path: '/components/avatars'
-        },
-        {
-          title: 'Badges',
-          path: '/components/badges'
-        },
-        {
-          title: 'Buttons',
-          path: '/components/buttons'
-        },
-        {
-          title: 'Button Group',
-          path: '/components/button-group'
-        },
-        {
-          title: 'Chips',
-          path: '/components/chips'
-        },
-        {
-          title: 'Dialogs',
-          path: '/components/dialogs'
-        },
-        {
-          title: 'List',
-          path: '/components/list'
-        },
-        {
-          title: 'Menu',
-          path: '/components/menu'
-        },
-        {
-          title: 'Pagination',
-          path: '/components/pagination'
-        },
-        {
-          title: 'Progress',
-          path: '/components/progress'
-        },
-        {
-          title: 'Ratings',
-          path: '/components/ratings'
-        },
-        {
-          title: 'Snackbar',
-          path: '/components/snackbar'
-        },
-        {
-          title: 'Swiper',
-          path: '/components/swiper'
-        },
-        {
-          title: 'Tabs',
-          path: '/components/tabs'
-        },
-        {
-          title: 'Timeline',
-          path: '/components/timeline'
-        },
-        {
-          title: 'Toasts',
-          path: '/components/toast'
-        },
-        {
-          title: 'Tree View',
-          path: '/components/tree-view'
-        },
-        {
-          title: 'More',
-          path: '/components/more'
-        }
-      ]
-    }
+    // {
+    //   sectionTitle: 'User Interface'
+    // },
+    // {
+    //   title: 'Typography',
+    //   icon: 'tabler:typography',
+    //   path: '/ui/typography'
+    // },
+    // {
+    //   title: 'Icons',
+    //   path: '/ui/icons',
+    //   icon: 'tabler:brand-tabler'
+    // },
+    // {
+    //   title: 'Cards',
+    //   icon: 'tabler:id',
+    //   children: [
+    //     {
+    //       title: 'Basic',
+    //       path: '/ui/cards/basic'
+    //     },
+    //     {
+    //       title: 'Advanced',
+    //       path: '/ui/cards/advanced'
+    //     },
+    //     {
+    //       title: 'Statistics',
+    //       path: '/ui/cards/statistics'
+    //     },
+    //     {
+    //       title: 'Widgets',
+    //       path: '/ui/cards/widgets'
+    //     },
+    //     {
+    //       title: 'Actions',
+    //       path: '/ui/cards/actions'
+    //     }
+    //   ]
+    // },
+    // {
+    //   badgeContent: '19',
+    //   title: 'Components',
+    //   icon: 'tabler:archive',
+    //   badgeColor: 'primary',
+    //   children: [
+    //     {
+    //       title: 'Accordion',
+    //       path: '/components/accordion'
+    //     },
+    //     {
+    //       title: 'Alerts',
+    //       path: '/components/alerts'
+    //     },
+    //     {
+    //       title: 'Avatars',
+    //       path: '/components/avatars'
+    //     },
+    //     {
+    //       title: 'Badges',
+    //       path: '/components/badges'
+    //     },
+    //     {
+    //       title: 'Buttons',
+    //       path: '/components/buttons'
+    //     },
+    //     {
+    //       title: 'Button Group',
+    //       path: '/components/button-group'
+    //     },
+    //     {
+    //       title: 'Chips',
+    //       path: '/components/chips'
+    //     },
+    //     {
+    //       title: 'Dialogs',
+    //       path: '/components/dialogs'
+    //     },
+    //     {
+    //       title: 'List',
+    //       path: '/components/list'
+    //     },
+    //     {
+    //       title: 'Menu',
+    //       path: '/components/menu'
+    //     },
+    //     {
+    //       title: 'Pagination',
+    //       path: '/components/pagination'
+    //     },
+    //     {
+    //       title: 'Progress',
+    //       path: '/components/progress'
+    //     },
+    //     {
+    //       title: 'Ratings',
+    //       path: '/components/ratings'
+    //     },
+    //     {
+    //       title: 'Snackbar',
+    //       path: '/components/snackbar'
+    //     },
+    //     {
+    //       title: 'Swiper',
+    //       path: '/components/swiper'
+    //     },
+    //     {
+    //       title: 'Tabs',
+    //       path: '/components/tabs'
+    //     },
+    //     {
+    //       title: 'Timeline',
+    //       path: '/components/timeline'
+    //     },
+    //     {
+    //       title: 'Toasts',
+    //       path: '/components/toast'
+    //     },
+    //     {
+    //       title: 'Tree View',
+    //       path: '/components/tree-view'
+    //     },
+    //     {
+    //       title: 'More',
+    //       path: '/components/more'
+    //     }
+    //   ]
+    // }
 
     //     sectionTitle: 'Forms & Tables'
     //   },

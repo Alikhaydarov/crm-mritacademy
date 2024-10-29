@@ -1,44 +1,44 @@
-import { Fab } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import { useState } from 'react';
-import Icon from 'src/@core/components/icon';
-import FormLayoutsCollapsible from 'src/views/forms/form-layouts/FormLayoutsCollapsible';
-import TableBasicSort from 'src/views/table/data-grid/TableBasicSort';
-import axios from 'axios';
+import { Fab } from '@mui/material'
+import Grid from '@mui/material/Grid'
+import axios from 'axios'
+import { useState } from 'react'
+import Icon from 'src/@core/components/icon'
+import FormLayoutsCollapsible from 'src/views/forms/form-layouts/FormLayoutsCollapsible'
+import TableBasicSort from 'src/views/table/data-grid/TableBasicSort'
 
 function Index() {
-  const [onMenu, setOnMenu] = useState<boolean>(false);
-  const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [file, setFile] = useState<File | null>(null); // State for storing the uploaded file
+  const [onMenu, setOnMenu] = useState<boolean>(false)
+  const [showFilters, setShowFilters] = useState<boolean>(false)
+  const [file, setFile] = useState<File | null>(null) // State for storing the uploaded file
 
   // Function to handle file change
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      setFile(event.target.files[0]);
+      setFile(event.target.files[0])
     }
-  };
+  }
 
   // Function to handle file upload
   const handleFileUpload = async () => {
     if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
+      const formData = new FormData()
+      formData.append('file', file)
 
       try {
         const response = await axios.post('/api/upload', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        console.log('File uploaded successfully:', response.data);
-        setFile(null); // Reset file after upload
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        console.log('File uploaded successfully:', response.data)
+        setFile(null) // Reset file after upload
       } catch (error) {
-        console.error('Error uploading file:', error);
+        console.error('Error uploading file:', error)
       }
     } else {
-      console.log('Please select a file first');
+      console.log('Please select a file first')
     }
-  };
+  }
 
   return (
     <div>
@@ -56,7 +56,7 @@ function Index() {
                 sx={{ '& svg': { mr: 1 } }}
               >
                 {onMenu ? <Icon icon='tabler:x' /> : <Icon icon='tabler:plus' />}
-                {onMenu ? 'Close' : "Add"}
+                {onMenu ? 'Close' : 'Add'}
               </Fab>
             </Grid>
             <Grid item>
@@ -72,13 +72,13 @@ function Index() {
             </Grid>
             <Grid item>
               <input
-                accept=".xlsx, .xls" // Accept only Excel files
+                accept='.xlsx, .xls' // Accept only Excel files
                 style={{ display: 'none' }}
-                id="upload-excel-file"
-                type="file"
+                id='upload-excel-file'
+                type='file'
                 onChange={handleFileChange}
               />
-              <label htmlFor="upload-excel-file">
+              <label htmlFor='upload-excel-file'>
                 <Fab
                   color='default'
                   variant='extended'
@@ -86,7 +86,6 @@ function Index() {
                     '& svg': { mr: 1 }
                   }}
                   onClick={handleFileUpload}
-                  disabled={!file} // Disable if no file is selected
                 >
                   <Icon icon='tabler:upload' />
                   Upload Excel
@@ -106,7 +105,7 @@ function Index() {
 
       <TableBasicSort />
     </div>
-  );
+  )
 }
 
-export default Index;
+export default Index
