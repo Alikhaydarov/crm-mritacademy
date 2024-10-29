@@ -52,12 +52,14 @@ const StepperVerticalWithoutNumbers = () => {
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
+
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1)
     if (activeStep === steps.length - 1) {
       toast.success('Completed All Steps!!')
     }
   }
+
   const handleReset = () => {
     setActiveStep(0)
   }

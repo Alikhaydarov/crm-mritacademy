@@ -46,6 +46,7 @@ const FormLayoutsTabs = () => {
   const [value, setValue] = useState<string>('personal-info')
   const [date, setDate] = useState<DateType>(null)
   const [language, setLanguage] = useState<string[]>([])
+
   const [values, setValues] = useState<State>({
     password: '',
     password2: '',
@@ -61,6 +62,7 @@ const FormLayoutsTabs = () => {
   const handlePasswordChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value })
   }
+
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
   }
@@ -69,6 +71,7 @@ const FormLayoutsTabs = () => {
   const handleConfirmChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value })
   }
+
   const handleClickShowConfirmPassword = () => {
     setValues({ ...values, showPassword2: !values.showPassword2 })
   }

@@ -68,6 +68,7 @@ const AddNewCustomer = ({ open, toggle, setSelectedClient, clients, setClients }
 
   const onSubmit = (data: FormData) => {
     const { address, company, contact, country, email, name } = data
+
     const finalData = {
       name,
       country,

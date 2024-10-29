@@ -60,4 +60,5 @@ const Shadows = (mode: PaletteMode): ThemeOptions['shadows'] => {
     ]
   }
 }
+
 export default Shadows

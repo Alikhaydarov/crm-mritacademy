@@ -88,6 +88,7 @@ const ComposePopup = (props: MailComposeType) => {
   const [subjectValue, setSubjectValue] = useState<string>('')
   const [bccValue, setbccValue] = useState<FieldMenuItems[]>([])
   const [messageValue, setMessageValue] = useState(EditorState.createEmpty())
+
   const [visibility, setVisibility] = useState<MailFields>({
     cc: false,
     bcc: false

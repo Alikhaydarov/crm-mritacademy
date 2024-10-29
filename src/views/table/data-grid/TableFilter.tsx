@@ -155,6 +155,7 @@ const TableColumns = () => {
   const handleSearch = (searchValue: string) => {
     setSearchText(searchValue)
     const searchRegex = new RegExp(escapeRegExp(searchValue), 'i')
+
     const filteredRows = data.filter(row => {
       return Object.keys(row).some(field => {
         // @ts-ignore

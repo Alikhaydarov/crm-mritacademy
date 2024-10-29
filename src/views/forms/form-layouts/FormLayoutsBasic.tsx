@@ -34,6 +34,7 @@ const FormLayoutsBasic = () => {
     password: '',
     showPassword: false
   })
+
   const [confirmPassValues, setConfirmPassValues] = useState<State>({
     password: '',
     showPassword: false
@@ -46,6 +47,7 @@ const FormLayoutsBasic = () => {
   const handleConfirmPassChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setConfirmPassValues({ ...confirmPassValues, [prop]: event.target.value })
   }
+
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
   }

@@ -19,6 +19,7 @@ const path_1 = require('path')
 // Installation: npm install --save-dev @iconify/tools @iconify/utils @iconify/json @iconify/iconify
 const tools_1 = require('@iconify/tools')
 const utils_1 = require('@iconify/utils')
+
 /* eslint-enable */
 const sources = {
   json: [

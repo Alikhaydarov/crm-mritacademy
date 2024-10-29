@@ -69,6 +69,7 @@ const data: { permissions: PermissionRowType[] } = {
 mock.onGet('/apps/permissions/data').reply(config => {
   const { q = '' } = config.params
   const queryLowered = q.toLowerCase()
+
   const filteredData = data.permissions.filter(
     permissions =>
       permissions.name.toLowerCase().includes(queryLowered) ||

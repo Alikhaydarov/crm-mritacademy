@@ -145,6 +145,7 @@ const CardWebsiteAnalyticsSlider = () => {
 
   // ** Hook
   const theme = useTheme()
+
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     initial: 0,
     rtl: theme.direction === 'rtl',

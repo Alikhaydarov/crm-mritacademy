@@ -89,12 +89,14 @@ const defaultValues: { [key: string]: string } = {
   val5: '',
   val6: ''
 }
+
 const TwoStepsV2 = () => {
   // ** State
   const [isBackspace, setIsBackspace] = useState<boolean>(false)
 
   // ** Hooks
   const theme = useTheme()
+
   const {
     control,
     handleSubmit,

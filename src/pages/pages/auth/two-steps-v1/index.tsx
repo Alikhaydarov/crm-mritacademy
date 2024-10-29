@@ -78,6 +78,7 @@ const TwoStepsV1 = () => {
 
   // ** Hooks
   const theme = useTheme()
+
   const {
     control,
     handleSubmit,

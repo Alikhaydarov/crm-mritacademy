@@ -61,6 +61,7 @@ const ChatLog = (props: ChatLogType) => {
 
     const formattedChatLog: FormattedChatsType[] = []
     let chatMessageSenderId = chatLog[0] ? chatLog[0].senderId : 11
+
     let msgGroup: MessageGroupType = {
       senderId: chatMessageSenderId,
       messages: []

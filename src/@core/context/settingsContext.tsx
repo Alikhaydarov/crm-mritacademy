@@ -43,6 +43,7 @@ export type PageSpecificSettings = {
   verticalNavToggleType?: VerticalNavToggle
   toastPosition?: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
 }
+
 export type SettingsContextValue = {
   settings: Settings
   saveSettings: (updatedSettings: Settings) => void

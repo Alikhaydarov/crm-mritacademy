@@ -108,6 +108,7 @@ const RowOptions = ({ id }: { id: number | string }) => {
   const handleRowOptionsClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
+
   const handleRowOptionsClose = () => {
     setAnchorEl(null)
   }

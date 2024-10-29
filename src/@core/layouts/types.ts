@@ -64,6 +64,7 @@ export type NavLink = {
 }
 
 export type VerticalNavItemsType = (NavLink | NavGroup | NavSectionTitle)[]
+
 export type HorizontalNavItemsType = (NavLink | NavGroup)[]
 
 export type FooterProps = {

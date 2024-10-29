@@ -45,9 +45,11 @@ const ThumbnailPlugin = (mainRef: MutableRefObject<KeenSliderInstance | null>): 
 const SwiperThumbnails = ({ direction }: { direction: Direction }) => {
   // ** Hooks
   const theme = useTheme()
+
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     rtl: direction === 'rtl'
   })
+
   const [thumbnailRef] = useKeenSlider<HTMLDivElement>(
     {
       rtl: direction === 'rtl',

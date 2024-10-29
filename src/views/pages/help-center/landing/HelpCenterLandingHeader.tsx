@@ -61,6 +61,7 @@ const HelpCenterLandingHeader = ({ data, allArticles }: Props) => {
     setOpen(false)
     setValue(option.title)
     let currentSubcategory: HelpCenterSubcategoriesType | null = null
+
     const currentCategory = data.find(category =>
       category.subCategories.find(subcategory =>
         subcategory.articles.find(article => {

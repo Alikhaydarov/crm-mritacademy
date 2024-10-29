@@ -58,6 +58,7 @@ const navigation = (): VerticalNavItemsType => {
       title:"Sozlamalar",
       icon:"tabler:settings"
     },
+
     // {
     //   title: 'Calendar',
     //   icon: 'tabler:calendar',

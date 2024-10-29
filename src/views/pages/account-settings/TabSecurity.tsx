@@ -231,4 +231,5 @@ const TabSecurity = () => {
     </Grid>
   )
 }
+
 export default TabSecurity

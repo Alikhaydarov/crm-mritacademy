@@ -89,6 +89,7 @@ export const appCalendarSlice = createSlice({
     })
   }
 })
+
 export const { handleSelectEvent, handleCalendarsUpdate, handleAllCalendars } = appCalendarSlice.actions
 
 export default appCalendarSlice.reducer

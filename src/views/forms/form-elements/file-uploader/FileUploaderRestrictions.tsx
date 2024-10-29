@@ -36,6 +36,7 @@ const FileUploaderRestrictions = () => {
 
   // ** Hooks
   const theme = useTheme()
+
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 2,
     maxSize: 2000000,

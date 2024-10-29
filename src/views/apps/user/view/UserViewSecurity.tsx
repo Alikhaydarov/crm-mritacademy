@@ -106,6 +106,7 @@ const UserViewSecurity = () => {
   const [defaultValues, setDefaultValues] = useState<any>({ mobile: '+1(968) 819-2547' })
   const [mobileNumber, setMobileNumber] = useState<string>(defaultValues.mobile)
   const [openEditMobileNumber, setOpenEditMobileNumber] = useState<boolean>(false)
+
   const [values, setValues] = useState<State>({
     newPassword: '',
     showNewPassword: false,
@@ -117,6 +118,7 @@ const UserViewSecurity = () => {
   const handleNewPasswordChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value })
   }
+
   const handleClickShowNewPassword = () => {
     setValues({ ...values, showNewPassword: !values.showNewPassword })
   }
@@ -125,6 +127,7 @@ const UserViewSecurity = () => {
   const handleConfirmNewPasswordChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value })
   }
+
   const handleClickShowConfirmNewPassword = () => {
     setValues({ ...values, showConfirmNewPassword: !values.showConfirmNewPassword })
   }
@@ -138,6 +141,7 @@ const UserViewSecurity = () => {
     setMobileNumber(defaultValues.mobile)
     handleEditMobileNumberClose()
   }
+
   const handleSubmitClick = () => {
     setDefaultValues({ ...defaultValues, mobile: mobileNumber })
     handleEditMobileNumberClose()

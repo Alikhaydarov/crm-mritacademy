@@ -35,6 +35,7 @@ const FileUploaderMultiple = () => {
 
   // ** Hooks
   const theme = useTheme()
+
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[]) => {
       setFiles(acceptedFiles.map((file: File) => Object.assign(file)))

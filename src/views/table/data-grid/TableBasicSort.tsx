@@ -55,6 +55,7 @@ const TableSort = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get<{ users: User[] }>('https://dummyjson.com/users');
+
         const transformedData = response.data.users.map((user, index) => ({
           id: index + 1,
           arrivalDate: new Date().toLocaleDateString(),

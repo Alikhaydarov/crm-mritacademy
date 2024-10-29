@@ -21,6 +21,7 @@ import { ProjectListDataType } from 'src/types/apps/userTypes'
 interface CellType {
   row: ProjectListDataType
 }
+
 const Img = styled('img')(({ theme }) => ({
   width: 32,
   height: 32,

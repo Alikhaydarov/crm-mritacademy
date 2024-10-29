@@ -9,6 +9,7 @@ interface Props {
   hasParent?: boolean
   horizontalNavItems?: HorizontalNavItemsType
 }
+
 const resolveComponent = (item: NavGroup | NavLink) => {
   if ((item as NavGroup).children) return HorizontalNavGroup
 

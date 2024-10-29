@@ -51,6 +51,7 @@ export type NotificationsType = {
       avatarColor?: ThemeColor
     }
 )
+
 interface Props {
   settings: Settings
   notifications: NotificationsType[]

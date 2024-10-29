@@ -70,6 +70,7 @@ mock.onPost('/jwt/register').reply(request => {
     const { email, password, username } = JSON.parse(request.data)
     const isEmailAlreadyInUse = users.find(user => user.email === email)
     const isUsernameAlreadyInUse = users.find(user => user.username === username)
+
     const error = {
       email: isEmailAlreadyInUse ? 'This email is already in use.' : null,
       username: isUsernameAlreadyInUse ? 'This username is already in use.' : null
@@ -81,6 +82,7 @@ mock.onPost('/jwt/register').reply(request => {
       if (length) {
         lastIndex = users[length - 1].id
       }
+
       const userData = {
         id: lastIndex + 1,
         email,

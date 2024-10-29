@@ -145,6 +145,7 @@ const AnalyticsWebsiteAnalyticsSlider = () => {
 
   // ** Hook
   const theme = useTheme()
+
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>(
     {
       loop: true,
@@ -161,9 +162,11 @@ const AnalyticsWebsiteAnalyticsSlider = () => {
       slider => {
         let mouseOver = false
         let timeout: number | ReturnType<typeof setTimeout>
+
         const clearNextTimeout = () => {
           clearTimeout(timeout as number)
         }
+
         const nextTimeout = () => {
           clearTimeout(timeout as number)
           if (mouseOver) return

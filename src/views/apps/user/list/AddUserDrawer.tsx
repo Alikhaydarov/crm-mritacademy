@@ -106,6 +106,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   // ** Hooks
   const dispatch = useDispatch<AppDispatch>()
   const store = useSelector((state: RootState) => state.user)
+
   const {
     reset,
     control,
@@ -118,6 +119,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     mode: 'onChange',
     resolver: yupResolver(schema)
   })
+
   const onSubmit = (data: UserData) => {
     if (store.allData.some((u: UsersType) => u.email === data.email || u.username === data.username)) {
       store.allData.forEach((u: UsersType) => {

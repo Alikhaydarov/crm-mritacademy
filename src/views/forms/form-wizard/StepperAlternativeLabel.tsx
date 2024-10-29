@@ -67,6 +67,7 @@ const StepperAlternativeLabel = () => {
   const [firstName, setFirstName] = useState<string>('')
   const [activeStep, setActiveStep] = useState<number>(0)
   const [language, setLanguage] = useState<string[]>([])
+
   const [state, setState] = useState<State>({
     password: '',
     password2: '',
@@ -78,12 +79,14 @@ const StepperAlternativeLabel = () => {
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
+
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1)
     if (activeStep === steps.length - 1) {
       toast.success('Form Submitted')
     }
   }
+
   const handleReset = () => {
     setEmail('')
     setGoogle('')
@@ -103,6 +106,7 @@ const StepperAlternativeLabel = () => {
   const handlePasswordChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [prop]: event.target.value })
   }
+
   const handleClickShowPassword = () => {
     setState({ ...state, showPassword: !state.showPassword })
   }
@@ -111,6 +115,7 @@ const StepperAlternativeLabel = () => {
   const handleConfirmChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [prop]: event.target.value })
   }
+
   const handleClickShowConfirmPassword = () => {
     setState({ ...state, showPassword2: !state.showPassword2 })
   }

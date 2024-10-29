@@ -108,6 +108,7 @@ const CreateDealWizard = () => {
   const handleNext = () => {
     setActiveStep(activeStep + 1)
   }
+
   const handlePrev = () => {
     if (activeStep !== 0) {
       setActiveStep(activeStep - 1)

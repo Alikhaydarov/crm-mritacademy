@@ -143,6 +143,7 @@ const headCells: readonly HeadCell[] = [
 function EnhancedTableHead(props: EnhancedTableProps) {
   // ** Props
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props
+
   const createSortHandler = (property: keyof Data) => (event: MouseEvent<unknown>) => {
     onRequestSort(event, property)
   }

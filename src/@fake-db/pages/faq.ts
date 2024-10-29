@@ -166,6 +166,7 @@ mock.onGet('/pages/faqs').reply(config => {
     const filteredData: FaqType = {}
     Object.entries(data.faqData).forEach(entry => {
       const [categoryName, categoryObj] = entry
+
       const filteredQAndAOfCategory = categoryObj.qandA.filter(qAndAObj => {
         return qAndAObj.question.toLowerCase().includes(queryLowered)
       })

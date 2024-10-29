@@ -672,6 +672,7 @@ mock.onGet('/pages/profile-header').reply(() => {
 mock.onGet('/pages/profile-table').reply(config => {
   const { q = '' } = config.params ?? ''
   const queryLowered = q.toLowerCase()
+
   const filteredData = projectTable.filter(row => {
     return (
       row.name.toLowerCase().includes(queryLowered) ||

@@ -65,12 +65,14 @@ const defaultAccountValues = {
   password: '',
   'confirm-password': ''
 }
+
 const defaultPersonalValues = {
   country: '',
   language: [],
   'last-name': '',
   'first-name': ''
 }
+
 const defaultSocialValues = {
   google: '',
   twitter: '',
@@ -87,12 +89,14 @@ const accountSchema = yup.object().shape({
     .required()
     .oneOf([yup.ref('password'), ''], 'Passwords must match')
 })
+
 const personalSchema = yup.object().shape({
   country: yup.string().required(),
   'last-name': yup.string().required(),
   'first-name': yup.string().required(),
   language: yup.array().min(1).required()
 })
+
 const socialSchema = yup.object().shape({
   google: yup.string().required(),
   twitter: yup.string().required(),
@@ -103,6 +107,7 @@ const socialSchema = yup.object().shape({
 const StepperLinearWithValidation = () => {
   // ** States
   const [activeStep, setActiveStep] = useState<number>(0)
+
   const [state, setState] = useState<State>({
     password: '',
     password2: '',
@@ -120,6 +125,7 @@ const StepperLinearWithValidation = () => {
     defaultValues: defaultAccountValues,
     resolver: yupResolver(accountSchema)
   })
+
   const {
     reset: personalReset,
     control: personalControl,
@@ -129,6 +135,7 @@ const StepperLinearWithValidation = () => {
     defaultValues: defaultPersonalValues,
     resolver: yupResolver(personalSchema)
   })
+
   const {
     reset: socialReset,
     control: socialControl,
@@ -143,12 +150,14 @@ const StepperLinearWithValidation = () => {
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
+
   const handleReset = () => {
     setActiveStep(0)
     socialReset({ google: '', twitter: '', facebook: '', linkedIn: '' })
     accountReset({ email: '', username: '', password: '', 'confirm-password': '' })
     personalReset({ country: '', language: [], 'last-name': '', 'first-name': '' })
   }
+
   const onSubmit = () => {
     setActiveStep(activeStep + 1)
     if (activeStep === steps.length - 1) {

@@ -27,6 +27,7 @@ export type CustomRadioBasicData = {
       meta?: never
     }
 )
+
 export type CustomRadioBasicProps = {
   name: string
   selected: string
@@ -43,6 +44,7 @@ export type CustomRadioIconsData = {
   content?: ReactNode
   isSelected?: boolean
 }
+
 export type CustomRadioIconsProps = {
   name: string
   icon?: string
@@ -61,6 +63,7 @@ export type CustomRadioImgData = {
   img: ReactNode
   isSelected?: boolean
 }
+
 export type CustomRadioImgProps = {
   name: string
   selected: string

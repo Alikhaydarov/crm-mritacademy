@@ -28,6 +28,7 @@ const FileUploaderSingle = () => {
 
   // ** Hooks
   const theme = useTheme()
+
   const { getRootProps, getInputProps } = useDropzone({
     multiple: false,
     accept: {

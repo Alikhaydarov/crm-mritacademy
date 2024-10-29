@@ -17,6 +17,7 @@ export type AppBarSearchType = {
   title: string
   category: string
 }
+
 export type AutocompleteType = {
   year: number
   title: string
@@ -29,6 +30,7 @@ export type FaqQAndAType = {
   answer: string
   question: string
 }
+
 export type FaqType = {
   [key: string]: {
     id: string
@@ -61,6 +63,7 @@ export type ProjectTableRowType = {
   avatarGroup: string[]
   avatarColor?: ThemeColor
 }
+
 export type ProfileHeaderType = {
   fullName: string
   coverImg: string
@@ -70,26 +73,32 @@ export type ProfileHeaderType = {
   designation: string
   designationIcon?: string
 }
+
 export type ProfileAvatarGroupType = {
   name: string
   avatar: string
 }
+
 export type ProfileChipType = {
   title: string
   color: ThemeColor
 }
+
 export type ProfileTabCommonType = {
   icon: string
   value: string
   property: string
 }
+
 export type ProfileTeamsType = ProfileTabCommonType & { color: ThemeColor }
+
 export type ProfileConnectionsType = {
   name: string
   avatar: string
   isFriend: boolean
   connections: string
 }
+
 export type ProfileTeamsTechType = {
   title: string
   avatar: string
@@ -97,6 +106,7 @@ export type ProfileTeamsTechType = {
   chipText: string
   ChipColor: ThemeColor
 }
+
 export type TeamsTabType = {
   title: string
   avatar: string
@@ -105,6 +115,7 @@ export type TeamsTabType = {
   chips: ProfileChipType[]
   avatarGroup: ProfileAvatarGroupType[]
 }
+
 export type ProjectsTabType = {
   hours: string
   tasks: string
@@ -125,6 +136,7 @@ export type ProjectsTabType = {
   avatarColor?: ThemeColor
   avatarGroup: ProfileAvatarGroupType[]
 }
+
 export type ConnectionsTabType = {
   name: string
   tasks: string
@@ -135,6 +147,7 @@ export type ConnectionsTabType = {
   isConnected: boolean
   chips: ProfileChipType[]
 }
+
 export type ProfileTabType = {
   teams: ProfileTeamsType[]
   about: ProfileTabCommonType[]
@@ -143,6 +156,7 @@ export type ProfileTabType = {
   teamsTech: ProfileTeamsTechType[]
   connections: ProfileConnectionsType[]
 }
+
 export type UserProfileActiveTab = ProfileTabType | TeamsTabType[] | ProjectsTabType[] | ConnectionsTabType[]
 
 // Data Grid page
@@ -168,12 +182,14 @@ export type HelpCenterSubcategoryArticlesType = {
   title: string
   content: string
 }
+
 export type HelpCenterSubcategoriesType = {
   icon: string
   slug: string
   title: string
   articles: HelpCenterSubcategoryArticlesType[]
 }
+
 export type HelpCenterCategoriesType = {
   icon: string
   slug: string
@@ -181,6 +197,7 @@ export type HelpCenterCategoriesType = {
   avatarColor: ThemeColor
   subCategories: HelpCenterSubcategoriesType[]
 }
+
 export type HelpCenterArticlesOverviewType = {
   img: string
   slug: string

@@ -18,6 +18,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const res = await axios.get('/pages/help-center/subcategory', {
     params: { category: 'getting-started' }
   })
+
   const apiData: { activeTab: string; data: HelpCenterCategoriesType; categories: HelpCenterCategoriesType[] } =
     await res.data
 

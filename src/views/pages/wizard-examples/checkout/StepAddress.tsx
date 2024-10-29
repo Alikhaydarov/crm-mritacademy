@@ -175,6 +175,7 @@ const StepAddress = ({ handleNext }: { handleNext: () => void }) => {
   const initialBasicSelected: string = data.filter(item => item.isSelected)[
     data.filter(item => item.isSelected).length - 1
   ].value
+
   const initialIconSelected: string = dataIcons.filter(item => item.isSelected)[
     dataIcons.filter(item => item.isSelected).length - 1
   ].value
@@ -209,6 +210,7 @@ const StepAddress = ({ handleNext }: { handleNext: () => void }) => {
       setSelectedBasicRadio((prop.target as HTMLInputElement).value)
     }
   }
+
   const handleIconRadioChange = (prop: string | ChangeEvent<HTMLInputElement>) => {
     if (typeof prop === 'string') {
       setSelectedIconRadio(prop)

@@ -27,6 +27,7 @@ export type CustomCheckboxBasicData = {
       meta?: never
     }
 )
+
 export type CustomCheckboxBasicProps = {
   name: string
   color?: ThemeColor
@@ -43,6 +44,7 @@ export type CustomCheckboxIconsData = {
   content?: ReactNode
   isSelected?: boolean
 }
+
 export type CustomCheckboxIconsProps = {
   name: string
   icon?: string
@@ -61,6 +63,7 @@ export type CustomCheckboxImgData = {
   img: ReactNode
   isSelected?: boolean
 }
+
 export type CustomCheckboxImgProps = {
   name: string
   color?: ThemeColor

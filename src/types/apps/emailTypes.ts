@@ -80,6 +80,7 @@ export type MailFoldersArrType = {
   icon: ReactElement
   name: MailFolderType
 }
+
 export type MailFoldersObjType = {
   [key: string]: any[]
 }

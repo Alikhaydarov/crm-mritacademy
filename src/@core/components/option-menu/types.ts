@@ -20,6 +20,7 @@ export type OptionDividerType = {
   linkProps?: never
   menuItemProps?: never
 }
+
 export type OptionMenuItemType = {
   text: ReactNode
   icon?: ReactNode

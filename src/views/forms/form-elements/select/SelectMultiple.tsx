@@ -1,27 +1,28 @@
 // ** React Imports
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useState } from 'react';
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
-import Chip from '@mui/material/Chip'
-import MenuItem from '@mui/material/MenuItem'
-import Checkbox from '@mui/material/Checkbox'
-import Typography from '@mui/material/Typography'
-import InputLabel from '@mui/material/InputLabel'
-import FormControl from '@mui/material/FormControl'
-import ListItemText from '@mui/material/ListItemText'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
+import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-const ITEM_HEIGHT = 48
-const ITEM_PADDING_TOP = 8
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
 const MenuProps = {
   PaperProps: {
     style: {
       width: 250,
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP
-    }
-  }
-}
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+    },
+  },
+};
 
 const names = [
   'Oliver Hansen',
@@ -33,31 +34,32 @@ const names = [
   'Miriam Wagner',
   'Bradley Wilkerson',
   'Virginia Andrews',
-  'Kelly Snyder'
-]
+  'Kelly Snyder',
+];
 
 const SelectMultiple = () => {
   // ** State
-  const [personName, setPersonName] = useState<string[]>([])
-  const [personNameNative, setPersonNameNative] = useState<string[]>([])
+  const [personName, setPersonName] = useState<string[]>([]);
+  const [personNameNative, setPersonNameNative] = useState<string[]>([]);
 
   const handleChange = (event: SelectChangeEvent<string[]>) => {
-    setPersonName(event.target.value as string[])
-  }
+    setPersonName(event.target.value as string[]);
+  };
 
   const handleChangeMultipleNative = (event: ChangeEvent<HTMLSelectElement>) => {
-    const { options } = event.target
-    const value: string[] = []
+    const { options } = event.target;
+    const value: string[] = [];
     for (let i = 0, l = options.length; i < l; i += 1) {
       if (options[i].selected) {
-        value.push(options[i].value)
+        value.push(options[i].value);
       }
     }
-    setPersonNameNative(value)
-  }
+    setPersonNameNative(value);
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', '& > *': { mt: 4, maxWidth: 500 } }}>
+      {/* Default Select */}
       <div>
         <Typography sx={{ mb: 2, fontWeight: 500 }}>Default</Typography>
         <FormControl fullWidth>
@@ -79,6 +81,8 @@ const SelectMultiple = () => {
           </Select>
         </FormControl>
       </div>
+
+      {/* Checkmarks Select */}
       <div>
         <Typography sx={{ mb: 2, fontWeight: 500 }}>Checkmarks</Typography>
         <FormControl fullWidth>
@@ -91,7 +95,7 @@ const SelectMultiple = () => {
             onChange={handleChange}
             id='demo-multiple-checkbox'
             labelId='demo-multiple-checkbox-label'
-            renderValue={selected => (selected as unknown as string[]).join(', ')}
+            renderValue={selected => (selected as string[]).join(', ')}
           >
             {names.map(name => (
               <MenuItem key={name} value={name}>
@@ -102,6 +106,8 @@ const SelectMultiple = () => {
           </Select>
         </FormControl>
       </div>
+
+      {/* Chip Select */}
       <div>
         <Typography sx={{ mb: 2, fontWeight: 500 }}>Chip</Typography>
         <FormControl fullWidth>
@@ -116,7 +122,7 @@ const SelectMultiple = () => {
             labelId='demo-multiple-chip-label'
             renderValue={selected => (
               <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                {(selected as unknown as string[]).map(value => (
+                {(selected as string[]).map(value => (
                   <Chip key={value} label={value} sx={{ m: 0.75 }} />
                 ))}
               </Box>
@@ -130,6 +136,8 @@ const SelectMultiple = () => {
           </Select>
         </FormControl>
       </div>
+
+      {/* Placeholder Select */}
       <div>
         <Typography sx={{ mb: 2, fontWeight: 500 }}>Placeholder</Typography>
         <FormControl fullWidth>
@@ -141,11 +149,10 @@ const SelectMultiple = () => {
             onChange={handleChange}
             inputProps={{ 'aria-label': 'Without label' }}
             renderValue={selected => {
-              if ((selected as unknown as string[]).length === 0) {
-                return <em>Placeholder</em>
+              if ((selected as string[]).length === 0) {
+                return <em>Placeholder</em>;
               }
-
-              return (selected as unknown as string[]).join(', ')
+              return (selected as string[]).join(', ');
             }}
           >
             <MenuItem disabled value=''>
@@ -159,6 +166,8 @@ const SelectMultiple = () => {
           </Select>
         </FormControl>
       </div>
+
+      {/* Native Select */}
       <div>
         <Typography sx={{ mb: 2, fontWeight: 500 }}>Native</Typography>
         <FormControl fullWidth>
@@ -169,7 +178,7 @@ const SelectMultiple = () => {
             native
             multiple
             label='Native'
-            value={personNameNative} // @ts-ignore
+            value={personNameNative}
             onChange={handleChangeMultipleNative}
             inputProps={{ id: 'select-multiple-native' }}
           >
@@ -182,7 +191,7 @@ const SelectMultiple = () => {
         </FormControl>
       </div>
     </Box>
-  )
-}
+  );
+};
 
-export default SelectMultiple
+export default SelectMultiple;

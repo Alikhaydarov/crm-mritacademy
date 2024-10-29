@@ -124,6 +124,7 @@ const TabAccount = () => {
       }
     }
   }
+
   const handleInputImageReset = () => {
     setInputValue('')
     setImgSrc('/images/avatars/15.png')

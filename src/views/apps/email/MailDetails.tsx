@@ -104,6 +104,7 @@ const MailDetails = (props: MailDetailsType) => {
     dispatch(updateMail({ emailIds: [mail.id], dataToUpdate: { isRead: false } }))
     setMailDetailsOpen(false)
   }
+
   const handleLabelsMenu = () => {
     const array: OptionType[] = []
     Object.entries(labelColors).map(([key, value]: string[]) => {
@@ -179,6 +180,7 @@ const MailDetails = (props: MailDetailsType) => {
   const prevMailIcon = direction === 'rtl' ? 'tabler:chevron-right' : 'tabler:chevron-left'
   const nextMailIcon = direction === 'rtl' ? 'tabler:chevron-left' : 'tabler:chevron-right'
   const goBackIcon = prevMailIcon
+
   const ScrollWrapper = ({ children }: { children: ReactNode }) => {
     if (hidden) {
       return <Box sx={{ height: '100%', overflowY: 'auto', overflowX: 'hidden' }}>{children}</Box>

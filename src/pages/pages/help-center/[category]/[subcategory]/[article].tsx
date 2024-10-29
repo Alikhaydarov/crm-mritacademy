@@ -24,6 +24,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const res = await axios.get('/pages/help-center/article', {
     params: { category: 'getting-started' }
   })
+
   const apiData: {
     categories: HelpCenterCategoriesType[]
     articles: HelpCenterSubcategoryArticlesType[]
