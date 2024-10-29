@@ -54,7 +54,7 @@ interface SettingsProviderProps {
 }
 
 const initialSettings: Settings = {
-  themeColor: 'primary',
+  themeColor: 'success',
   mode: themeConfig.mode,
   skin: themeConfig.skin,
   footer: themeConfig.footer,

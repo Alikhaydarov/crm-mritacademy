@@ -26,18 +26,6 @@ import { Settings } from 'src/@core/context/settingsContext'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 const Toggler = styled(Box)<BoxProps>(({ theme }) => ({
-  right: 0,
-  top: '50%',
-  display: 'flex',
-  cursor: 'pointer',
-  position: 'fixed',
-  padding: theme.spacing(2),
-  zIndex: theme.zIndex.modal,
-  transform: 'translateY(-50%)',
-  color: theme.palette.common.white,
-  backgroundColor: theme.palette.primary.main,
-  borderTopLeftRadius: theme.shape.borderRadius,
-  borderBottomLeftRadius: theme.shape.borderRadius
 }))
 
 const Drawer = styled(MuiDrawer)<DrawerProps>(({ theme }) => ({
