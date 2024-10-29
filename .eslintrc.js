@@ -18,7 +18,7 @@ module.exports = {
   },
   rules: {
     'react/react-in-jsx-scope': 'off',
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }], // Add .ts and .tsx here
     'react/display-name': 'off',
     '@next/next/no-img-element': 'off',
     'react/no-unescaped-entities': 'off',
@@ -55,4 +55,4 @@ module.exports = {
       { blankLine: 'always', prev: ['*'], next: ['multiline-const', 'multiline-let', 'multiline-var', 'export'] }
     ]
   }
-}
+};
