@@ -1,5 +1,4 @@
 import { useState, useEffect, MouseEvent } from 'react';
-import axios from 'axios';
 import {
   Grid,
   Snackbar,
@@ -16,17 +15,9 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
-import { DataGrid, GridColDef, GridDeleteIcon, GridRowSelectionModel } from '@mui/x-data-grid';
-import { Icon } from '@iconify/react';
+import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import axiosClient from 'src/configs/axios'; // axiosClient ni import qiling
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  address: string;
-}
 
 interface TransformedUser {
   id: number;
@@ -51,28 +42,35 @@ const TableSort = () => {
   const [selectedIds, setSelectedIds] = useState<GridRowSelectionModel>([]);
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
+  // Backenddan ma'lumotlarni olish
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<{ users: User[] }>('https://dummyjson.com/users');
+        const response = await axiosClient.get('/receptions');
+        console.log('Backenddan qaytgan ma`lumot:', response.data);
 
-        const transformedData = response.data.users.map((user, index) => ({
-          id: index + 1,
-          arrivalDate: new Date().toLocaleDateString(),
-          fullName: `${user.firstName} ${user.lastName}`,
-          phone: `+998-90-500-50-05`,
-          courseType: 'FrontEnd',
-          weekDays: 'Dushanba, Chorshanba, Payshanba',
-          courseLanguage: "O'zbek",
-          time: '18:00',
-          occupation: 'Student',
-          address: 'Samarkand',
+        // Faqat results massivini qayta ishlash
+        const transformedData = response.data.results.map((user: any) => ({
+          id: user.id || Math.random(), // Agar id bo'lmasa, random id berish
+          arrivalDate: user.created_at || new Date().toLocaleDateString(),
+          fullName: `${user.full_name || ''} ${user.last_name || ''}`,
+          phone: user.phone_number1 || 'Noma’lum',
+          courseType: user.course_type || 'Frontend',
+          weekDays: user.week_days || 'Dushanba, Chorshanba, Payshanba',
+          courseLanguage: user.course_language || "O'zbek",
+          time: user.lesson_time.time_slot || '18:00',
+          occupation: user.activity || 'Talaba', // activity dan foydalanamiz
+          address: user.address || 'Samarkand',
         }));
+
         setData(transformedData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Ma`lumotni olishda xatolik:', error);
+        setToastSeverity('error');
+        setToastOpen(true);
       }
     };
+
     fetchData();
   }, []);
 
@@ -86,18 +84,27 @@ const TableSort = () => {
 
   const handleDelete = () => {
     setConfirmOpen(true);
-    handleMenuClose(); // Close menu after clicking delete
+    handleMenuClose(); // Menu yopiladi
   };
 
-  const confirmDelete = () => {
-    setData((prevData) =>
-      prevData.filter((user) => !selectedIds.includes(user.id))
-    );
-    setToastMessage('Selected users deleted successfully!');
-    setToastSeverity('success');
-    setToastOpen(true);
-    setConfirmOpen(false);
-    setSelectedIds([]);
+  const confirmDelete = async () => {
+    try {
+      const response = await axiosClient.post('/receptions/', {
+        ids: selectedIds, // Make sure selectedIds is an array
+      });
+      console.log('Delete successful:', response.data);
+      setData((prevData) => prevData.filter((user) => !selectedIds.includes(user.id)));
+      setToastMessage('Tanlangan foydalanuvchilar o`chirildi!');
+      setToastSeverity('success');
+      setToastOpen(true);
+      setConfirmOpen(false);
+      setSelectedIds([]);
+    } catch (error) {
+      console.error('Error while deleting:', error);
+      setToastMessage('O`chirishda xatolik yuz berdi');
+      setToastSeverity('error');
+      setToastOpen(true);
+    }
   };
 
   const cancelDelete = () => {
@@ -120,12 +127,9 @@ const TableSort = () => {
   return (
     <Card>
       <Grid container alignItems="center" padding={2}>
-        {/* Header Title */}
         <Grid item xs>
           <CardHeader title="O`quvchilar" />
         </Grid>
-
-        {/* Three-Dot Menu */}
         <Grid item>
           <IconButton onClick={handleMenuOpen}>
             <MoreVertIcon />
@@ -136,14 +140,11 @@ const TableSort = () => {
             onClose={handleMenuClose}
           >
             <MenuItem onClick={handleDelete} disabled={selectedIds.length === 0}>
-             O'chirish  <GridDeleteIcon/>
+              O'chirish
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>Option 2</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Option 3</MenuItem>
           </Menu>
         </Grid>
       </Grid>
-
       <DataGrid
         autoHeight
         rows={data}
@@ -154,13 +155,11 @@ const TableSort = () => {
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
       />
-
-      {/* Delete Confirmation Dialog */}
       <Dialog open={confirmOpen} onClose={cancelDelete}>
-        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogTitle>O`chirishni tasdiqlash</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Siz rostan ham bu o'quvchini o'chirmoqchimisiz?
+            Siz rostan ham tanlangan foydalanuvchilarni o'chirmoqchimisiz?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -172,8 +171,6 @@ const TableSort = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* Toast Notification */}
       <Snackbar
         open={toastOpen}
         autoHideDuration={6000}

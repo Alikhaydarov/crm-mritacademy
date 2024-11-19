@@ -13,7 +13,7 @@ import Icon from 'src/@core/components/icon'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
-const CardStatsWithAreaChart = (props: CardStatsWithAreaChartProps) => {
+const   CardStatsWithAreaChart = (props: CardStatsWithAreaChartProps) => {
   // ** Props
   const {
     sx,

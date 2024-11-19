@@ -352,7 +352,7 @@ const navigation: VerticalNavItemsType = [
     icon: 'tabler:brand-tabler'
   },
   {
-    
+
     title: 'Cards',
     icon: 'tabler:id',
     children: [
@@ -574,11 +574,11 @@ const navigation: VerticalNavItemsType = [
     ]
   },
   {
-    path: '/acl',
+    path: '/acl/reception',
     action: 'read',
     subject: 'acl-page',
     icon: 'tabler:shield',
-    title: 'Access Control'
+    title: 'reception'
   },
   {
     title: 'Others',

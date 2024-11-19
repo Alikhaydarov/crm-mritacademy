@@ -5,13 +5,14 @@ import { createContext, useEffect, useState, ReactNode } from 'react'
 import { useRouter } from 'next/router'
 
 // ** Axios
-import axios from 'axios'
 
 // ** Config
 import authConfig from 'src/configs/auth'
 
 // ** Types
 import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType } from './types'
+
+import axiosClient from 'src/configs/axios'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -42,7 +43,7 @@ const AuthProvider = ({ children }: Props) => {
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
       if (storedToken) {
         setLoading(true)
-        await axios
+        await axiosClient
           .get(authConfig.meEndpoint, {
             headers: {
               Authorization: storedToken
@@ -72,20 +73,19 @@ const AuthProvider = ({ children }: Props) => {
   }, [])
 
   const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
-    axios
-      .post(authConfig.loginEndpoint, params)
+    axiosClient
+      .post('/token/', params)
       .then(async response => {
-        params.rememberMe
-          ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.accessToken)
-          : null
-        const returnUrl = router.query.returnUrl
 
-        setUser({ ...response.data.userData })
-        params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
+        console.log('response user', response)
 
-        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+        // const returnUrl = router.query.returnUrl
 
-        router.replace(redirectURL as string)
+        // setUser({ ...response.data.userData })
+
+        // const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+
+        // router.replace(redirectURL as string)
       })
 
       .catch(err => {

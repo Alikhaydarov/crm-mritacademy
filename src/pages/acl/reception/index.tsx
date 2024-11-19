@@ -1,9 +1,8 @@
 import { Fab } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Icon from 'src/@core/components/icon'
-import axiosClient from 'src/configs/axios'
 import FormLayoutsCollapsible from 'src/views/forms/form-layouts/FormLayoutsCollapsible'
 import TableBasicSort from 'src/views/table/data-grid/TableBasicSort'
 
@@ -18,48 +17,6 @@ function Index() {
       setFile(event.target.files[0])
     }
   }
-  const [teachers, setTeachers] = useState<[]>([]);
-  const [data, setData] = useState<[]>([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosClient.get('/courses');
-        const names = response.data.map((item: { name: string }) => item.name)
-
-
-
-
-        setData(response.data.map((item: { name: string }) => item.name));
-      } catch (error) {
-        console.error('Ma`lumotni olishda xatolik:', error);
-
-      }
-
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchTeachers = async () => {
-      try {
-        const response = await axiosClient.get('/teachers');
-       setData(response.data.results.map((item: { fullname: string }) => item.fullname));
-
-
-
-
-
-        setData(response.data.map((item: { name: string }) => item.name));
-      } catch (error) {
-        console.error('Ma`lumotni olishda xatolik:', error);
-
-      }
-
-    };
-
-    fetchTeachers();
-  }, []);
 
   // Function to handle file upload
   const handleFileUpload = async () => {
@@ -131,6 +88,7 @@ function Index() {
                   onClick={handleFileUpload}
                 >
                   <Icon icon='tabler:upload' />
+                  Upload Excel
                 </Fab>
               </label>
             </Grid>

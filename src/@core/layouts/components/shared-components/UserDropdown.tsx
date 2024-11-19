@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, SyntheticEvent, Fragment } from 'react'
+import { useState, SyntheticEvent, Fragment, useEffect } from 'react'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -42,30 +42,62 @@ const MenuItemStyled = styled(MenuItem)<MenuItemProps>(({ theme }) => ({
   }
 }))
 
+interface UserData {
+  // Define the shape of your user data here
+  full_name: string;
+  role: string;
+}
+
+
+
+
+
 const UserDropdown = (props: Props) => {
   // ** Props
-  const { settings } = props
+  const [userData, setUserData] = useState<UserData | null>(null);
+
+  useEffect(() => {
+    // Ensure that we're running on the client side
+    if (typeof window !== 'undefined') {
+      const storedData = localStorage.getItem('userData');
+      if (storedData) {
+        // Parse the stored data and ensure it matches the UserData type
+        const parsedData: UserData = JSON.parse(storedData);
+
+        // Modify the name if necessary
+        const modifiedData = {
+          ...parsedData,
+          name: parsedData.full_name || 'John Doe',  // Default to 'John Doe' if no name exists
+        };
+
+        // Update the state with modified user data
+        setUserData(modifiedData);
+      }
+    }
+  }, []);
+
+  const { settings } = props;
 
   // ** States
-  const [anchorEl, setAnchorEl] = useState<Element | null>(null)
+  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
 
   // ** Hooks
-  const router = useRouter()
-  const { logout } = useAuth()
+  const router = useRouter();
+  const { logout } = useAuth();
 
   // ** Vars
-  const { direction } = settings
+  const { direction } = settings;
 
   const handleDropdownOpen = (event: SyntheticEvent) => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleDropdownClose = (url?: string) => {
     if (url) {
-      router.push(url)
+      router.push(url);
     }
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   const styles = {
     px: 4,
@@ -77,14 +109,14 @@ const UserDropdown = (props: Props) => {
     textDecoration: 'none',
     '& svg': {
       mr: 2.5,
-      color: 'text.primary'
-    }
-  }
+      color: 'text.primary',
+    },
+  };
 
   const handleLogout = () => {
-    logout()
-    handleDropdownClose()
-  }
+    logout();
+    handleDropdownClose();
+  };
 
   return (
     <Fragment>
@@ -95,23 +127,30 @@ const UserDropdown = (props: Props) => {
         badgeContent={<BadgeContentSpan />}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'right'
+          horizontal: 'right',
         }}
       >
         <Avatar
-          alt='John Doe'
+          alt={userData?.full_name || 'User'} // Dynamic avatar alt text
           onClick={handleDropdownOpen}
           sx={{ width: 40, height: 40 }}
           src='/images/avatars/1.png'
         />
+
       </Badge>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={() => handleDropdownClose()}
         sx={{ '& .MuiMenu-paper': { width: 230, mt: 4.5 } }}
-        anchorOrigin={{ vertical: 'bottom', horizontal: direction === 'ltr' ? 'right' : 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: direction === 'ltr' ? 'right' : 'left' }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: direction === 'ltr' ? 'right' : 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: direction === 'ltr' ? 'right' : 'left',
+        }}
       >
         <Box sx={{ py: 1.75, px: 6 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -120,14 +159,21 @@ const UserDropdown = (props: Props) => {
               badgeContent={<BadgeContentSpan />}
               anchorOrigin={{
                 vertical: 'bottom',
-                horizontal: 'right'
+                horizontal: 'right',
               }}
             >
-              <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar
+                alt={userData?.full_name || 'User'} // Dynamic avatar alt text
+                src='/images/avatars/1.png'
+                sx={{ width: '2.5rem', height: '2.5rem' }}
+              />
+
             </Badge>
             <Box sx={{ display: 'flex', ml: 2.5, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 500 }}>John Doe</Typography>
-              <Typography variant='body2'>Admin</Typography>
+              <Typography sx={{ fontWeight: 500 }}>
+                {userData ? userData.full_name : 'John Doe'} {/* Dynamically display user name */}
+              </Typography>
+              <Typography variant='body2'>{userData?.role || 'Email not available'}</Typography>
             </Box>
           </Box>
         </Box>
@@ -176,7 +222,9 @@ const UserDropdown = (props: Props) => {
         </MenuItemStyled>
       </Menu>
     </Fragment>
-  )
-}
+  );
+};
 
-export default UserDropdown
+export default UserDropdown;
+
+

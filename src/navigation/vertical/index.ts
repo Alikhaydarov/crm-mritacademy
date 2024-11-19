@@ -24,22 +24,25 @@ const navigation = (): VerticalNavItemsType => {
     //   ]
     // },
     {
-      sectionTitle: ''
+      sectionTitle: '',
+      subject: 'reception'
     },
     {
       title: 'Reception',
       icon: 'tabler:square-arrow-down',
-      path: '/apps/reception'
+      path: '/apps/reception',
+      action: 'read',
+      subject: 'reception'
     },
     {
       title: 'O`qituvchilar',
       icon: 'tabler:user',
-      path:'/apps/teachers'
+      path: '/apps/teachers'
     },
     {
       title: 'Guruhlar',
       icon: 'tabler:menu-2',
-      path:'/apps/groups'
+      path: '/apps/groups'
     },
     {
       title: 'Talabalar',
@@ -51,12 +54,12 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'tabler:database-dollar'
     },
     {
-      title:"Hisobotlar",
-      icon:'tabler:chart-pie-filled'
+      title: 'Hisobotlar',
+      icon: 'tabler:chart-pie-filled'
     },
     {
-      title:"Sozlamalar",
-      icon:"tabler:settings"
+      title: 'Sozlamalar',
+      icon: 'tabler:settings'
     },
 
     // {
@@ -594,54 +597,54 @@ const navigation = (): VerticalNavItemsType => {
     //       }
     //     ]
     //   },
-    //   {
-    //     path: '/acl',
-    //     action: 'read',
-    //     subject: 'acl-page',
-    //     icon: 'tabler:shield',
-    //     title: 'Access Control'
-    //   },
-    //   {
-    //     title: 'Others',
-    //     icon: 'tabler:dots',
-    //     children: [
-    //       {
-    //         title: 'Menu Levels',
-    //         children: [
-    //           {
-    //             title: 'Menu Level 2.1'
-    //           },
-    //           {
-    //             title: 'Menu Level 2.2',
-    //             children: [
-    //               {
-    //                 title: 'Menu Level 3.1'
-    //               },
-    //               {
-    //                 title: 'Menu Level 3.2'
-    //               }
-    //             ]
-    //           }
-    //         ]
-    //       },
-    //       {
-    //         title: 'Disabled Menu',
-    //         disabled: true
-    //       },
-    //       {
-    //         title: 'Raise Support',
-    //         externalLink: true,
-    //         openInNewTab: true,
-    //         path: 'https://pixinvent.ticksy.com/'
-    //       },
-    //       {
-    //         title: 'Documentation',
-    //         externalLink: true,
-    //         openInNewTab: true,
-    //         path: 'https://demos.pixinvent.com/vuexy-nextjs-admin-template/documentation'
-    //       }
-    //     ]
-    //   }
+    {
+      path: '/acl/reception',
+      action: 'read',
+      subject: 'acl-page',
+      icon: 'tabler:shield',
+      title: 'reception'
+    },
+    {
+      title: 'Others',
+      icon: 'tabler:dots',
+      children: [
+        {
+          title: 'Menu Levels',
+          children: [
+            {
+              title: 'Menu Level 2.1'
+            },
+            {
+              title: 'Menu Level 2.2',
+              children: [
+                {
+                  title: 'Menu Level 3.1'
+                },
+                {
+                  title: 'Menu Level 3.2'
+                }
+              ]
+            }
+          ]
+        },
+        // {
+        //   title: 'Disabled Menu',
+        //   disabled: true
+        // },
+        {
+          title: 'Raise Support',
+          externalLink: true,
+          openInNewTab: true,
+          path: 'https://pixinvent.ticksy.com/'
+        },
+        {
+          title: 'Documentation',
+          externalLink: true,
+          openInNewTab: true,
+          path: 'https://demos.pixinvent.com/vuexy-nextjs-admin-template/documentation'
+        }
+      ]
+    }
   ]
 }
 
