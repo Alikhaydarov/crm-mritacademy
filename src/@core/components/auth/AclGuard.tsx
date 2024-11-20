@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactNode, useEffect } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -42,29 +42,25 @@ const AclGuard = (props: AclGuardProps) => {
   console.log('authtttt', auth)
 
   // ** Vars
-  let ability: AppAbility
+  const [ability, setAbility] = useState<AppAbility | undefined>(undefined)
 
   useEffect(() => {
     if (auth.user && auth.user.role && !guestGuard && router.route === '/') {
       const homeRoute = getHomeRoute(auth.user.role)
       router.replace(homeRoute)
     }
-  }, [auth.user, guestGuard, router])
 
-  // User is logged in, build ability for the user based on his role
-  if (auth.user && !ability) {
-    ability = buildAbilityFor(auth.user.role, aclAbilities.subject)
-
-    console.log('ability', ability)
-
-    if (router.route === '/') {
-      return <Spinner />
+    // Build ability only when the user is logged in
+    if (auth.user && !ability) {
+      const userAbility = buildAbilityFor(auth.user.role, aclAbilities.subject)
+      setAbility(userAbility)
+      console.log('ability', userAbility)
     }
-  }
+  }, [auth.user, guestGuard, router, ability, aclAbilities.subject])
 
   // If guest guard or no guard is true or any error page
   if (guestGuard || router.route === '/404' || router.route === '/500' || !authGuard) {
-    // If user is logged in and his ability is built
+    // If user is logged in and ability is built
     if (auth.user && ability) {
       return <AbilityContext.Provider value={ability}>{children}</AbilityContext.Provider>
     } else {
@@ -73,7 +69,7 @@ const AclGuard = (props: AclGuardProps) => {
     }
   }
 
-  // Check the access of current user and render pages
+  // Check the access of the current user and render pages
   if (ability && auth.user && ability.can(aclAbilities.action, aclAbilities.subject)) {
     if (router.route === '/') {
       return <Spinner />
