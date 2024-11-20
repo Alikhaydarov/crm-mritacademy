@@ -89,8 +89,8 @@ const TableSort = () => {
 
   const confirmDelete = async () => {
     try {
-      const response = await axiosClient.post('/receptions/', {
-        ids: selectedIds, // Make sure selectedIds is an array
+      const response = await axiosClient.delete('/receptions/', {
+        data: { ids: selectedIds }, // Pass selectedIds in the request body
       });
       console.log('Delete successful:', response.data);
       setData((prevData) => prevData.filter((user) => !selectedIds.includes(user.id)));

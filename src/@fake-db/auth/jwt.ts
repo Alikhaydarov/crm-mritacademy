@@ -1,14 +1,14 @@
 // ** JWT import
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
 // ** Mock Adapter
-import mock from 'src/@fake-db/mock'
+import mock from 'src/@fake-db/mock';
 
 // ** Default AuthConfig
-import defaultAuthConfig from 'src/configs/auth'
+import defaultAuthConfig from 'src/configs/auth';
 
 // ** Types
-import { UserDataType } from 'src/context/types'
+import { UserDataType } from 'src/context/types';
 
 const users: UserDataType[] = [
   {
@@ -17,7 +17,7 @@ const users: UserDataType[] = [
     password: 'admin',
     fullName: 'John Doe',
     username: 'johndoe',
-    email: 'admin@vuexy.com'
+    email: 'admin@vuexy.com',
   },
   {
     id: 2,
@@ -25,144 +25,105 @@ const users: UserDataType[] = [
     password: 'client',
     fullName: 'Jane Doe',
     username: 'janedoe',
-    email: 'client@vuexy.com'
-  }
-]
+    email: 'client@vuexy.com',
+  },
+];
 
-// ! These two secrets should be in .env file and not in any other file
+// ** JWT Configurations from .env
 const jwtConfig = {
-  secret: process.env.NEXT_PUBLIC_JWT_SECRET,
-  expirationTime: process.env.NEXT_PUBLIC_JWT_EXPIRATION,
-  refreshTokenSecret: process.env.NEXT_PUBLIC_JWT_REFRESH_TOKEN_SECRET
-}
+  secret: process.env.NEXT_PUBLIC_JWT_SECRET || 'defaultSecret',
+  expirationTime: process.env.NEXT_PUBLIC_JWT_EXPIRATION || '1h',
+  refreshTokenSecret: process.env.NEXT_PUBLIC_JWT_REFRESH_TOKEN_SECRET || 'defaultRefreshSecret',
+};
 
-type ResponseType = [number, { [key: string]: any }]
+type ResponseType = [number, { [key: string]: any }];
 
 mock.onPost('/jwt/login').reply(request => {
-  const { email, password } = JSON.parse(request.data)
+  const { email, password } = JSON.parse(request.data);
 
-  let error = {
-    email: ['Something went wrong']
-  }
-
-  const user = users.find(u => u.email === email && u.password === password)
+  const user = users.find(u => u.email === email && u.password === password);
 
   if (user) {
-    const accessToken = jwt.sign({ id: user.id }, jwtConfig.secret as string, { expiresIn: jwtConfig.expirationTime })
+    const accessToken = jwt.sign({ id: user.id }, jwtConfig.secret, { expiresIn: jwtConfig.expirationTime });
 
     const response = {
       accessToken,
-      userData: { ...user, password: undefined }
-    }
+      userData: { ...user, password: undefined },
+    };
 
-    return [200, response]
+    return [200, response];
   } else {
-    error = {
-      email: ['email or Password is Invalid']
-    }
-
-    return [400, { error }]
+    return [400, { error: { email: ['Email or Password is Invalid'] } }];
   }
-})
+});
 
 mock.onPost('/jwt/register').reply(request => {
-  if (request.data.length > 0) {
-    const { email, password, username } = JSON.parse(request.data)
-    const isEmailAlreadyInUse = users.find(user => user.email === email)
-    const isUsernameAlreadyInUse = users.find(user => user.username === username)
-    const error = {
-      email: isEmailAlreadyInUse ? 'This email is already in use.' : null,
-      username: isUsernameAlreadyInUse ? 'This username is already in use.' : null
-    }
+  const { email, password, username } = JSON.parse(request.data || '{}');
 
-    if (!error.username && !error.email) {
-      const { length } = users
-      let lastIndex = 0
-      if (length) {
-        lastIndex = users[length - 1].id
-      }
-      const userData = {
-        id: lastIndex + 1,
-        email,
-        password,
-        username,
-        avatar: null,
-        fullName: '',
-        role: 'admin'
-      }
+  const isEmailAlreadyInUse = users.some(user => user.email === email);
+  const isUsernameAlreadyInUse = users.some(user => user.username === username);
 
-      users.push(userData)
-
-      const accessToken = jwt.sign({ id: userData.id }, jwtConfig.secret as string)
-
-      const user = { ...userData }
-      delete user.password
-
-      const response = { accessToken }
-
-      return [200, response]
-    }
-
-    return [200, { error }]
-  } else {
-    return [401, { error: 'Invalid Data' }]
+  if (isEmailAlreadyInUse || isUsernameAlreadyInUse) {
+    return [
+      400,
+      {
+        error: {
+          email: isEmailAlreadyInUse ? 'This email is already in use.' : null,
+          username: isUsernameAlreadyInUse ? 'This username is already in use.' : null,
+        },
+      },
+    ];
   }
-})
+
+  const newUser = {
+    id: users.length + 1,
+    email,
+    password,
+    username,
+    avatar: null,
+    fullName: '',
+    role: 'client',
+  };
+
+  users.push(newUser);
+
+  const accessToken = jwt.sign({ id: newUser.id }, jwtConfig.secret, { expiresIn: jwtConfig.expirationTime });
+
+  return [200, { accessToken }];
+});
 
 mock.onGet('/auth/me').reply(config => {
-  // ** Get token from header
-  // @ts-ignore
-  const token = config.headers.Authorization as string
+  const token = config.headers?.Authorization?.replace('Bearer ', '');
 
-  // ** Default response
-  let response: ResponseType = [200, {}]
+  if (!token) {
+    return [401, { error: 'Token is missing' }];
+  }
 
-  // ** Checks if the token is valid or expired
-  jwt.verify(token, jwtConfig.secret as string, (err, decoded) => {
-    // ** If token is expired
-    if (err) {
-      // ** If onTokenExpiration === 'logout' then send 401 error
-      if (defaultAuthConfig.onTokenExpiration === 'logout') {
-        // ** 401 response will logout user from AuthContext file
-        response = [401, { error: { error: 'Invalid User' } }]
-      } else {
-        // ** If onTokenExpiration === 'refreshToken' then generate the new token
-        const oldTokenDecoded = jwt.decode(token, { complete: true })
+  try {
+    const decoded = jwt.verify(token, jwtConfig.secret) as { id: number };
 
-        // ** Get user id from old token
-        // @ts-ignore
-        const { id: userId } = oldTokenDecoded.payload
+    const user = users.find(u => u.id === decoded.id);
 
-        // ** Get user that matches id in token
-        const user = users.find(u => u.id === userId)
-
-        // ** Sign a new token
-        const accessToken = jwt.sign({ id: userId }, jwtConfig.secret as string, {
-          expiresIn: jwtConfig.expirationTime
-        })
-
-        // ** Set new token in localStorage
-        window.localStorage.setItem(defaultAuthConfig.storageTokenKeyName, accessToken)
-
-        const obj = { userData: { ...user, password: undefined } }
-
-        // ** return 200 with user data
-        response = [200, obj]
-      }
-    } else {
-      // ** If token is valid do nothing
-      // @ts-ignore
-      const userId = decoded.id
-
-      // ** Get user that matches id in token
-      const userData = JSON.parse(JSON.stringify(users.find((u: UserDataType) => u.id === userId)))
-
-      delete userData.password
-
-      // ** return 200 with user data
-      response = [200, { userData }]
+    if (!user) {
+      return [401, { error: 'User not found' }];
     }
-  })
 
-  return response
-})
+    const userData = { ...user, password: undefined };
+
+    return [200, { userData }];
+  } catch (err) {
+    if (defaultAuthConfig.onTokenExpiration === 'refreshToken') {
+      const decoded = jwt.decode(token) as { id: number } | null;
+
+      if (decoded && decoded.id) {
+        const newAccessToken = jwt.sign({ id: decoded.id }, jwtConfig.secret, {
+          expiresIn: jwtConfig.expirationTime,
+        });
+
+        return [200, { accessToken: newAccessToken }];
+      }
+    }
+
+    return [401, { error: 'Invalid or expired token' }];
+  }
+});

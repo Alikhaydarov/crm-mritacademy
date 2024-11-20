@@ -1,46 +1,51 @@
-import { AbilityBuilder, Ability } from '@casl/ability'
+import { AbilityBuilder, PureAbility } from '@casl/ability'
 
-export type Subjects = string
+export type Subjects = 'acl-page' | 'all' | string
 export type Actions = 'manage' | 'create' | 'read' | 'update' | 'delete'
 
-export type AppAbility = Ability<[Actions, Subjects]> | undefined
+export type AppAbility = PureAbility<[Actions, Subjects]>
 
-export const AppAbility = Ability as any
+export const AppAbility = PureAbility as new (...args: any[]) => AppAbility
+
 export type ACLObj = {
   action: Actions
-  subject: string
+  subject: Subjects
 }
 
 /**
- * Please define your own Ability rules according to your app requirements.
- * We have just shown Admin and Client rules for demo purpose where
- * admin can manage everything and client can just visit ACL page
+ * Define Ability rules based on user roles and subjects.
  */
-const defineRulesFor = (role: string, subject: string) => {
-  const { can, rules } = new AbilityBuilder(AppAbility)
+const defineRulesFor = (role: string, subject: Subjects) => {
+  const { can, rules } = new AbilityBuilder<AppAbility>(AppAbility)
 
   if (role.toLowerCase() === 'admin') {
-    can('manage')
+    can('manage', 'all') // Admin can manage everything
   } else if (role.toLowerCase() === 'student') {
-    can(['read'], 'acl-page','manage')
+    can('read', 'acl-page') // Students can only read the ACL page
   } else {
-    can(['read', 'create', 'update', 'delete'], subject)
+    can(['read', 'create', 'update', 'delete'], subject) // Default permissions for others
   }
 
   return rules
 }
 
-export const buildAbilityFor = (role: string, subject: string): AppAbility => {
+export const buildAbilityFor = (role: string, subject: Subjects): AppAbility => {
   return new AppAbility(defineRulesFor(role, subject), {
-    // https://casl.js.org/v5/en/guide/subject-type-detection
-    // @ts-ignore
-    detectSubjectType: object => object!.type
+    // Handle object type detection safely
+    detectSubjectType: (object: { type?: string; constructor?: { name: string } }) => {
+      if (object.type) {
+        return object.type
+      } else if (object.constructor && object.constructor.name) {
+        return object.constructor.name
+      }
+      throw new Error('Unable to detect subject type') // Handle edge cases
+    },
   })
 }
 
 export const defaultACLObj: ACLObj = {
   action: 'manage',
-  subject: 'all'
+  subject: 'all',
 }
 
 export default defineRulesFor
