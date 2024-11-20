@@ -52,7 +52,12 @@ module.exports = {
     'padding-line-between-statements': [
       'error',
       { blankLine: 'always', prev: ['export'], next: ['*'] },
-      { blankLine: 'always', prev: ['*'], next: ['multiline-const', 'multiline-let', 'multiline-var', 'export'] }
-    ]
+      { blankLine: 'always', prev: ['*'], next: ['multiline-const', 'multiline-let', 'multiline-var', 'export'] },
+      { blankLine: 'always', prev: ['*'], next: ['return'] },
+    ],
+
+    // Additional rules can be added to suppress warnings if needed
+    'no-console': 'warn', // Warn about console statements
+    'no-debugger': 'warn', // Warn about debugger statements
   }
 };

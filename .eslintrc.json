@@ -13,7 +13,7 @@
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
-    // add new line above comment
+    // Add new line above comment
     "lines-around-comment": [
       "error",
       {
@@ -25,9 +25,9 @@
         "allowArrayStart": true
       }
     ],
-    // add new line above return
+    // Add new line above return
     "newline-before-return": "error",
-    // add new line below import
+    // Add new line below import
     "import/newline-after-import": [
       "error",
       {
@@ -42,7 +42,12 @@
           "{}": false
         }
       }
-    ]
+    ],
+    // Allow console.log in development and warn in production
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    // Enable strict typing rules (optional)
+    "@typescript-eslint/explicit-module-boundary-types": "warn",
+    "@typescript-eslint/explicit-function-return-type": "warn"
   },
   "plugins": [
     "import"
