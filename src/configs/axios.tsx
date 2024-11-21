@@ -14,7 +14,9 @@ axiosClient.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  return config;
+
+  
+return config;
 });
 
 axiosClient.interceptors.response.use(
@@ -24,7 +26,9 @@ axiosClient.interceptors.response.use(
       // 401 bo'lsa, foydalanuvchini login sahifasiga yo'naltiring
       window.location.href = '/login';
     }
-    return Promise.reject(error);
+
+    
+return Promise.reject(error);
   }
 );
 

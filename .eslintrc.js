@@ -2,7 +2,7 @@ module.exports = {
   env: {
     node: true,
     es6: true,
-    browser: true
+    browser: true,
   },
   parser: '@babel/eslint-parser',
   extends: ['next/core-web-vitals', 'prettier'],
@@ -13,8 +13,8 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
       modules: true,
-      experimentalObjectRestSpread: true
-    }
+      experimentalObjectRestSpread: true,
+    },
   },
   rules: {
     'react/react-in-jsx-scope': 'off',
@@ -24,7 +24,7 @@ module.exports = {
     'react/no-unescaped-entities': 'off',
     'import/no-anonymous-default-export': 'off',
 
-    // add new line above comment
+    // Add new line above comment
     'lines-around-comment': [
       'error',
       {
@@ -33,22 +33,22 @@ module.exports = {
         allowBlockStart: true,
         allowClassStart: true,
         allowObjectStart: true,
-        allowArrayStart: true
-      }
+        allowArrayStart: true,
+      },
     ],
 
-    // add new line above return
+    // Add new line above return
     'newline-before-return': 'error',
 
-    // add new line below import
+    // Add new line below import
     'import/newline-after-import': [
       'error',
       {
-        count: 1
-      }
+        count: 1,
+      },
     ],
 
-    // add new line after each var, const, let declaration
+    // Add new line after each var, const, let declaration
     'padding-line-between-statements': [
       'error',
       { blankLine: 'always', prev: ['export'], next: ['*'] },
@@ -56,8 +56,8 @@ module.exports = {
       { blankLine: 'always', prev: ['*'], next: ['return'] },
     ],
 
-    // Additional rules can be added to suppress warnings if needed
+    // Suppress console-related warnings
     'no-console': 'warn', // Warn about console statements
     'no-debugger': 'warn', // Warn about debugger statements
-  }
+  },
 };

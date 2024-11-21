@@ -1,6 +1,7 @@
 import { AbilityBuilder, PureAbility } from '@casl/ability'
 
 export type Subjects = 'acl-page' | 'all' | string
+
 export type Actions = 'manage' | 'create' | 'read' | 'update' | 'delete'
 
 export type AppAbility = PureAbility<[Actions, Subjects]>

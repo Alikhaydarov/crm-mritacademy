@@ -627,6 +627,7 @@ const navigation = (): VerticalNavItemsType => {
             }
           ]
         },
+
         // {
         //   title: 'Disabled Menu',
         //   disabled: true
