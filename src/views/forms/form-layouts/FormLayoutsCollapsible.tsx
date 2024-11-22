@@ -1,244 +1,279 @@
-import { ChangeEvent, SyntheticEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 // ** MUI Imports
-import Grid from '@mui/material/Grid'
-import Select from '@mui/material/Select'
+import Accordion from '@mui/material/Accordion'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import AccordionSummary from '@mui/material/AccordionSummary'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
+import FormControl from '@mui/material/FormControl'
+import Grid from '@mui/material/Grid'
+import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
-import Accordion from '@mui/material/Accordion'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import InputLabel from '@mui/material/InputLabel'
-import FormControl from '@mui/material/FormControl'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import { SelectChangeEvent } from '@mui/material/Select'
+import axiosClient from 'src/configs/axios'
 
 const FormLayoutsCollapsible = () => {
   // ** States
   const [fullName, setFullName] = useState<string>('')
   const [phoneNumber1, setPhoneNumber1] = useState<string>('')
-  const [phoneNumber2, setPhoneNumber2] = useState<string>('')
-  const [course, setCourse] = useState<number | string>('')
+  const [phoneNumber2, setPhoneNumber2] = useState<string | null>(null)
+  const [course, setCourse] = useState<number | string>('') // Allow string or number
+  // Store course name
   const [weekDays, setWeekDays] = useState<string>('')
-  const [courseLanguage, setCourseLanguage] = useState<string>('')
+  const [courseLanguage, setCourseLanguage] = useState<string>('uzbek') // Ensure correct value for backend
   const [lessonTime, setLessonTime] = useState<string>('')
-  const [birthYear, setBirthYear] = useState<number | string>('')
+  const [birthYear, setBirthYear] = useState<string>('')
   const [address, setAddress] = useState<string>('')
-  const [status, setStatus] = useState<string>('')
+  const [status, setStatus] = useState<string>('active') // Ensure correct value for backend
   const [activity, setActivity] = useState<string>('')
 
-  // Handle input change for TextField components
-  const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = target
-    switch (name) {
-      case 'fullName':
-        setFullName(value)
-        break
-      case 'phoneNumber1':
-        setPhoneNumber1(value)
-        break
-      case 'phoneNumber2':
-        setPhoneNumber2(value)
-        break
-      case 'weekDays':
-        setWeekDays(value)
-        break
-      case 'courseLanguage':
-        setCourseLanguage(value)
-        break
-      case 'lessonTime':
-        setLessonTime(value)
-        break
-      case 'birthYear':
-        setBirthYear(Number(value))
-        break
-      case 'address':
-        setAddress(value)
-        break
-      case 'status':
-        setStatus(value)
-        break
-      case 'activity':
-        setActivity(value)
-        break
+  // Validation uchun error states
+  const [errors, setErrors] = useState({
+    fullName: false,
+    phoneNumber1: false,
+    phoneNumber2: false,
+    address: false,
+    status: false,
+    birthYear: false,
+    weekDays: false
+  })
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+
+  // Backenddan olinadigan dinamik ma'lumotlar
+  const [languagesData, setLanguagesData] = useState<{ id: string; name: string }[]>([])
+  const [statusesData, setStatusesData] = useState<{ id: string; name: string }[]>([])
+  const [coursesData, setCoursesData] = useState<{ id: number; name: string }[]>([]) // Ensure correct type for courses
+  const [lessonTimesData, setLessonTimesData] = useState<{ id: string; time_slot: string }[]>([])
+
+  // Backenddan ma'lumotlarni olish uchun useEffect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [lessonResponse, coursesResponse] = await Promise.all([
+          axiosClient.get('lesson_times/'),
+          axiosClient.get('/courses/')
+        ])
+        setLessonTimesData(lessonResponse.data.results) // This is correct, fetching lesson times
+        setCoursesData(coursesResponse.data)
+        console.log(lessonResponse.data.results)
+      } catch (error) {
+        console.error('Dinamik ma`lumotlarni olishda xatolik:', error)
+      }
     }
+    fetchData()
+  }, [])
+
+  // Validation funksiyasi
+  const validateForm = () => {
+    const newErrors = {
+      fullName: fullName.trim() === '',
+      phoneNumber1: phoneNumber1.trim() === '',
+      phoneNumber2: phoneNumber2 ? phoneNumber2.trim() === '' : false, // Validate phoneNumber2 if provided
+      address: address.trim() === '',
+      status: status === '',
+      birthYear: !/^\d{4}$/.test(birthYear.trim()),
+      weekDays: weekDays.trim() === ''
+    }
+    setErrors(newErrors)
+    return !Object.values(newErrors).includes(true)
   }
 
-  // Handle select change for Select components
-  const handleSelectChange = (e: SelectChangeEvent<string>, field: string) => {
-    const value = e.target.value as string
-    switch (field) {
-      case 'course':
-        setCourse(value)
-        break
-      case 'weekDays':
-        setWeekDays(value)
-        break
-      case 'courseLanguage':
-        setCourseLanguage(value)
-        break
-      case 'status':
-        setStatus(value)
-        break
+  // Formani yuborish funksiyasi
+  const handleSubmit = async () => {
+    if (!validateForm()) return
+
+    const newReception = {
+      full_name: fullName,
+      phone_number1: phoneNumber1,
+      phone_number2: phoneNumber2 || '', // optional
+      course: course, // Send course ID, not the name
+      week_days: weekDays,
+      course_language: courseLanguage,
+      lesson_time: { time_slot: lessonTime },
+      birth_year: parseInt(birthYear, 10),
+      address,
+      status,
+      activity,
+      arrival_time: new Date().toISOString().split('T')[0] // Sending current date
     }
+
+    try {
+      const response = await axiosClient.post('/receptions/', newReception)
+      setSuccessMessage("O'quvchi muvaffaqiyatli qo'shildi!")
+    } catch (error: any) {}
   }
 
   return (
     <form onSubmit={e => e.preventDefault()}>
       <Accordion>
-        <AccordionSummary id="form-layouts-header">
-          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+        <AccordionSummary>
+          <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
             Reception
           </Typography>
         </AccordionSummary>
-        <Divider sx={{ m: '0 !important' }} />
+        <Divider />
         <AccordionDetails>
           <Grid container spacing={5}>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Ism Familiya"
-                placeholder="Ism Familiya"
+                label='Ism Familiya'
+                placeholder='Ism Familiya'
                 value={fullName}
-                onChange={handleInputChange}
-                name="fullName"
-                inputProps={{ maxLength: 50 }}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setFullName(e.target.value)}
+                error={errors.fullName}
+                helperText={errors.fullName ? "Ism Familiya maydoni to'ldirilishi shart" : ''}
                 required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Telefon raqami"
-                placeholder="+998-000-00-00"
-                value={phoneNumber1}
-                onChange={handleInputChange}
-                name="phoneNumber1"
-                inputProps={{ maxLength: 15 }}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Telefon raqami 2"
-                placeholder="+998-000-00-00"
-                value={phoneNumber2}
-                onChange={handleInputChange}
-                name="phoneNumber2"
-                inputProps={{ maxLength: 50 }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel id="course-label">Kurs</InputLabel>
-                <Select
-                  onChange={(e: SelectChangeEvent<string>) => handleSelectChange(e, 'course')}
-                  labelId="course-label"
-                >
-                  <MenuItem value="1">Frontend</MenuItem>
-                  <MenuItem value="2">Backend</MenuItem>
-                  <MenuItem value="3">Mobile Development</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel id="weekDays-label">Hafta kunlari</InputLabel>
-                <Select
-                  value={weekDays}
-                  onChange={(e: SelectChangeEvent<string>) => handleSelectChange(e, 'weekDays')}
-                  labelId="weekDays-label"
-                >
-                  <MenuItem value="1">Dushanba-Chorshanba-Juma</MenuItem>
-                  <MenuItem value="2">Seshanba-Payshanba-Shanba</MenuItem>
-                  <MenuItem value="3">Har kuni</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel id="courseLanguage-label">Kurs tili</InputLabel>
-                <Select
-                  value={courseLanguage}
-                  onChange={(e: SelectChangeEvent<string>) => handleSelectChange(e, 'courseLanguage')}
-                  labelId="courseLanguage-label"
-                >
-                  <MenuItem value="uz">O'zbek</MenuItem>
-                  <MenuItem value="ru">Rus</MenuItem>
-                  <MenuItem value="en">Ingliz</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Dars vaqti"
-                placeholder="09:00 - 12:00"
-                value={lessonTime}
-                onChange={handleInputChange}
-                name="lessonTime"
-                inputProps={{ maxLength: 50 }}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Tug'ilgan yili"
-                placeholder="2000"
-                type="number"
+                label="Tug'ilgan yil"
+                placeholder='YYYY'
                 value={birthYear}
-                onChange={handleInputChange}
-                name="birthYear"
-                inputProps={{ min: 0, max: 2147483647 }}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setBirthYear(e.target.value)}
+                error={errors.birthYear}
+                helperText={errors.birthYear ? "Tug'ilgan yil noto'g'ri formatda" : ''}
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Manzil"
-                placeholder="Samarkand, Amir Temur ko'chasi"
-                value={address}
-                onChange={handleInputChange}
-                name="address"
-                inputProps={{ maxLength: 255 }}
+                label='Hafta kunlari'
+                placeholder='Dushanba, Seshanba...'
+                value={weekDays}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setWeekDays(e.target.value)}
+                error={errors.weekDays}
+                helperText={errors.weekDays ? "Hafta kunlari maydoni to'ldirilishi shart" : ''}
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
-                <InputLabel id="status-label">Status</InputLabel>
+                <InputLabel id='course-label'>Kurs</InputLabel>
+                <Select
+                  value={course} // Ensure course is either a string (empty) or a number (course ID)
+                  onChange={(e: SelectChangeEvent<number | string>) => setCourse(e.target.value)} // Allow either string or number
+                  labelId='course-label'
+                  required
+                >
+                  {coursesData.map(course => (
+                    <MenuItem key={course.id} value={course.id}>
+                      {' '}
+                      {/* Use course id */}
+                      {course.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel id='lessonTime-label'>Dars vaqti</InputLabel>
+                <Select
+                  value={lessonTime}
+                  onChange={(e: SelectChangeEvent<string>) => setLessonTime(e.target.value)}
+                  labelId='lessonTime-label'
+                >
+                  {lessonTimesData.map(time => (
+                    <MenuItem key={time.id} value={time.time_slot}>
+                      {' '}
+                      {/* Change to use time_slot */}
+                      {time.time_slot}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label='Telefon raqami 1'
+                placeholder='Telefon raqami'
+                value={phoneNumber1}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPhoneNumber1(e.target.value)}
+                error={errors.phoneNumber1}
+                helperText={errors.phoneNumber1 ? 'Telefon raqami 1 majburiy' : ''}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label='Telefon raqami 2'
+                placeholder='Telefon raqami 2'
+                value={phoneNumber2 || ''}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setPhoneNumber2(e.target.value)}
+                error={errors.phoneNumber2}
+                helperText={errors.phoneNumber2 ? "Telefon raqami 2 noto'g'ri" : ''}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label='Manzil'
+                placeholder='Manzil'
+                value={address}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setAddress(e.target.value)}
+                error={errors.address}
+                helperText={errors.address ? "Manzil maydoni to'ldirilishi shart" : ''}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel id='status-label'>Status</InputLabel>
                 <Select
                   value={status}
-                  onChange={(e: SelectChangeEvent<string>) => handleSelectChange(e, 'status')}
-                  labelId="status-label"
+                  onChange={(e: SelectChangeEvent<string>) => setStatus(e.target.value)}
+                  labelId='status-label'
                 >
-                  <MenuItem value="called">Telefonda gaplashildi</MenuItem>
-                  <MenuItem value="not-called">Telefonda gaplashilmadi</MenuItem>
+                  <MenuItem value='online'>Online</MenuItem>
+                  <MenuItem value='offline'>Offline</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
+
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel id='course-language-label'>Kurs Tili</InputLabel>
+                <Select
+                  value={courseLanguage}
+                  onChange={(e: SelectChangeEvent<string>) => setCourseLanguage(e.target.value)}
+                  labelId='course-language-label'
+                >
+                  <MenuItem value='uz'>Uzbek</MenuItem>
+                  <MenuItem value='ru'>Russian</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                multiline
-                rows={3}
-                label="Faoliyat"
-                placeholder="Qiziqishlari, maqsadlari, qo'shimcha ma'lumotlar"
+                label='Faoliyat' // Faoliyat input maydoni
+                placeholder='Faoliyatni kiriting'
                 value={activity}
-                onChange={handleInputChange}
-                name="activity"
-                inputProps={{ maxLength: 100 }}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setActivity(e.target.value)} // value ni o'zgartirish
               />
             </Grid>
-            <Grid item xs={12}>
-              <Button variant="contained" color="primary" type="submit">
+
+            <Grid item xs={10}>
+              <Button fullWidth variant='contained' onClick={handleSubmit}>
                 Yuborish
               </Button>
             </Grid>
           </Grid>
+          {successMessage && (
+            <Typography variant='body1' color='success.main' sx={{ marginTop: 2 }}>
+              {successMessage}
+            </Typography>
+          )}
         </AccordionDetails>
       </Accordion>
     </form>

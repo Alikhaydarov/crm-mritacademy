@@ -18,48 +18,35 @@ function Index() {
       setFile(event.target.files[0])
     }
   }
-  const [teachers, setTeachers] = useState<[]>([]);
-  const [data, setData] = useState<[]>([]);
+  const [teachers, setTeachers] = useState<[]>([])
+  const [data, setData] = useState<[]>([])
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosClient.get('/courses');
+        const response = await axiosClient.get('/courses')
         const names = response.data.map((item: { name: string }) => item.name)
-
-
-
-
-        setData(response.data.map((item: { name: string }) => item.name));
+        setData(response.data.map((item: { name: string }) => item.name))
       } catch (error) {
-        console.error('Ma`lumotni olishda xatolik:', error);
-
+        console.error('Ma`lumotni olishda xatolik:', error)
       }
+    }
+    fetchData()
+  }, [])
 
-    };
+  // useEffect(() => {
+  //   const fetchTeachers = async () => {
+  //     try {
+  //       const response = await axiosClient.get('lesson_times/')
+  //       setTeachers(response.data)
 
-    fetchData();
-  }, []);
+  //       console.log(teachers, "time")
+  //     } catch (error) {
+  //       console.error('Ma`lumotni olishda xatolik:', error)
+  //     }
+  //   }
 
-  useEffect(() => {
-    const fetchTeachers = async () => {
-      try {
-        const response = await axiosClient.get('/teachers');
-       setData(response.data.results.map((item: { fullname: string }) => item.fullname));
-
-
-
-
-
-        setData(response.data.map((item: { name: string }) => item.name));
-      } catch (error) {
-        console.error('Ma`lumotni olishda xatolik:', error);
-
-      }
-
-    };
-
-    fetchTeachers();
-  }, []);
+  //   fetchTeachers()
+  // }, [])
 
   // Function to handle file upload
   const handleFileUpload = async () => {
@@ -103,15 +90,7 @@ function Index() {
               </Fab>
             </Grid>
             <Grid item>
-              <Fab
-                onClick={() => setShowFilters(prev => !prev)}
-                color='secondary'
-                variant='extended'
-                sx={{ '& svg': { mr: 1 } }}
-              >
-                <Icon icon='tabler:filter' />
-                {/* {showFilters ? 'Filterni Yopish' : 'Filterni Ko‘rsatish'} */}
-              </Fab>
+       
             </Grid>
             <Grid item>
               <input

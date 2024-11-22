@@ -32,7 +32,6 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'tabler:square-arrow-down',
       path: '/apps/reception',
       action: 'read',
-      subject: 'reception'
     },
     {
       title: 'O`qituvchilar',
@@ -597,55 +596,14 @@ const navigation = (): VerticalNavItemsType => {
     //       }
     //     ]
     //   },
-    {
-      path: '/acl/reception',
-      action: 'read',
-      subject: 'acl-page',
-      icon: 'tabler:shield',
-      title: 'reception'
-    },
-    {
-      title: 'Others',
-      icon: 'tabler:dots',
-      children: [
-        {
-          title: 'Menu Levels',
-          children: [
-            {
-              title: 'Menu Level 2.1'
-            },
-            {
-              title: 'Menu Level 2.2',
-              children: [
-                {
-                  title: 'Menu Level 3.1'
-                },
-                {
-                  title: 'Menu Level 3.2'
-                }
-              ]
-            }
-          ]
-        },
+    // {
+    //   path: '/acl/reception',
+    //   action: 'read',
+    //   subject: 'acl-page',
+    //   icon: 'tabler:shield',
+    //   title: 'reception'
+    // },
 
-        // {
-        //   title: 'Disabled Menu',
-        //   disabled: true
-        // },
-        {
-          title: 'Raise Support',
-          externalLink: true,
-          openInNewTab: true,
-          path: 'https://pixinvent.ticksy.com/'
-        },
-        {
-          title: 'Documentation',
-          externalLink: true,
-          openInNewTab: true,
-          path: 'https://demos.pixinvent.com/vuexy-nextjs-admin-template/documentation'
-        }
-      ]
-    }
   ]
 }
 
