@@ -73,6 +73,7 @@ const themeConfig: ThemeConfig = {
   horizontalMenuToggle: 'hover' /* click | hover /*! Note: This is for Horizontal navigation menu only */,
   horizontalMenuAnimation: true /* true | false */,
 
+  
   // ** AppBar Configs
   appBar: 'fixed' /* fixed | static | hidden /*! Note: hidden value will only work for Vertical Layout */,
   appBarBlur: true /* true | false */,

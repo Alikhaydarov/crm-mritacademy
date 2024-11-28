@@ -49,13 +49,9 @@ const TableSort = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosClient.get('/receptions')
-        console.log('Backenddan qaytgan ma`lumot:', response.data)
-
-        // Faqat results massivini qayta ishlash
-        let counter = 1 // IDni 1 dan boshlaymiz
-        const transformedData = response.data.results.map((user: any) => ({
-          id: user.id || counter++, // Backenddan kelgan ID yoki ketma-ketlik ID
+        const response = await axiosClient.get('/receptions');
+        const transformedData = response.data.results.map((user: any, index: number) => ({
+          id: user.id || index + 1,
           arrivalDate: user.created_at || new Date().toLocaleDateString(),
           fullName: `${user.full_name || ''} ${user.last_name || ''}`,
           phone: user.phone_number1 || 'Noma’lum',
@@ -65,18 +61,31 @@ const TableSort = () => {
           time: user.lesson_time?.time_slot || '18:00',
           occupation: user.activity || 'Talaba',
           address: user.address || 'Samarkand'
-        }))
+        }));
 
-        setData(transformedData)
+        setData(transformedData);
       } catch (error) {
-        console.error('Ma`lumotni olishda xatolik:', error)
-        setToastSeverity('error')
-        setToastOpen(true)
+        console.error('Ma`lumotni olishda xatolik:', error);
+        setToastSeverity('error');
+        setToastOpen(true);
       }
-    }
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+
+    const handleReceptionAdded = () => {
+      fetchData();
+    };
+
+    // Tinglovchi qo'shish
+    window.addEventListener('reception-added', handleReceptionAdded);
+
+    // Tinglovchini olib tashlash
+    return () => {
+      window.removeEventListener('reception-added', handleReceptionAdded);
+    };
+  }, []);
+
 
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setMenuAnchor(event.currentTarget)

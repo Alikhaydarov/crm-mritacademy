@@ -28,9 +28,9 @@ const CardBasic = () => {
       <Grid item xs={12} sm={6} md={4}>
         <CardImgTop />
       </Grid>
-      <Grid item xs={12} sm={6} md={4}>
+      {/* <Grid item xs={12} sm={6} md={4}>
         <CardUser />
-      </Grid>
+      </Grid> */}
       <Grid item xs={12} sm={6} md={4}>
         <CardWithCollapse />
       </Grid>

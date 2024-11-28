@@ -58,7 +58,7 @@ const FormLayoutsBasic = () => {
 
   return (
     <Card>
-      <CardHeader title='Basic' />
+      <CardHeader  />
       <CardContent>
         <form onSubmit={e => e.preventDefault()}>
           <Grid container spacing={5}>
